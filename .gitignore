@@ -1,0 +1,39 @@
+*.log
+
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.ear
+
+# virtual machine crash logs
+hs_err_pid*
+
+.metadata
+.recommenders
+/bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# maven
+target/
+
+# object-db
+*.odb
+*.odb$
+
+# eclipse
+.project
+.classpath
+
+#logfile
+log/
+logs/
