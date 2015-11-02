@@ -6,6 +6,7 @@ import java.io.StreamCorruptedException;
 
 import indsys.filter.EbookReader;
 import indsys.filter.LineBuilder;
+import indsys.filter.LineFilter;
 import indsys.filter.LineSorter;
 import indsys.filter.LineSpinner;
 import indsys.filter.LineToString;
@@ -40,7 +41,15 @@ public class App {
 					
 				}
 			});
-			LineToString lineToString = new LineToString(lineSorter, new Writeable<String>() {
+			LineFilter lineFilter = new LineFilter(lineSorter, new Writeable<Line>() {
+
+				@Override
+				public void write(Line value) throws StreamCorruptedException {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			LineToString lineToString = new LineToString(lineFilter, new Writeable<String>() {
 
 				@Override
 				public void write(String value) throws StreamCorruptedException {

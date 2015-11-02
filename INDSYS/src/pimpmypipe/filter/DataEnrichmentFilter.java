@@ -34,6 +34,10 @@ public abstract class DataEnrichmentFilter<in, out>  extends AbstractFilter<in, 
         // just read the next entity and return it 
         return getNextEntity();
     }
+    
+    protected out preSend(out entity) {
+    	return entity;
+    }
 
     /**
      * write an entity into the filter. the filter will act like an passive-filter 
@@ -46,7 +50,7 @@ public abstract class DataEnrichmentFilter<in, out>  extends AbstractFilter<in, 
             if (value != ENDING_SIGNAL) {
                 if (m_TempWriteEntity == null ) m_TempWriteEntity = getNewEntityObject();
                 if (fillEntity(value, m_TempWriteEntity)) {
-                    writeOutput(m_TempWriteEntity);
+                    writeOutput(preSend(m_TempWriteEntity));
                     m_TempWriteEntity = null;
                 }
             }else {
@@ -76,7 +80,7 @@ public abstract class DataEnrichmentFilter<in, out>  extends AbstractFilter<in, 
                     finished = true;
                 }
             }while(!finished);
-            return entity;
+            return preSend(entity);
         }else {
             return null;
         }

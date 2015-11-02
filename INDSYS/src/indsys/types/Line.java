@@ -34,6 +34,19 @@ public class Line implements Comparable<Line> {
 	public void setWords(List<String> words) {
 		_words = words;
 	}
+	
+	public String getFirstWord() {
+		if(_words.isEmpty()) {
+			return null;
+		} else {
+			return _words.get(0);
+		}
+	}
+	
+	public void copyFrom(Line other) {
+		this._lineNumber = other._lineNumber;
+		this._words = other._words;
+	}
 
 	@Override
 	public String toString() {
