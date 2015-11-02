@@ -1,7 +1,6 @@
 package indsys.filter;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -22,11 +21,22 @@ public class LineFilter extends DataEnrichmentFilter<Line, Line> {
 		super(input, output);
 		loadUninterestingWords();
 	}
+	
+	public LineFilter(Readable<Line> input) throws InvalidParameterException {
+		super(input);
+		loadUninterestingWords();
+	}
+	
+	public LineFilter(Writeable<Line> output) throws InvalidParameterException {
+		super(output);
+		loadUninterestingWords();
+	}
 
 	private void loadUninterestingWords() {
 		_uninterestingWords = new HashSet<>();
 		try {
 			FileReader fileReader = new FileReader(FILE_NAME);
+			@SuppressWarnings("resource")
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			String word;
 			while( (word = bufferedReader.readLine()) != null) {

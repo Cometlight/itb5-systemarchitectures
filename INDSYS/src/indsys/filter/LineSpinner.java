@@ -3,6 +3,7 @@ package indsys.filter;
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 import indsys.types.Line;
 import pimpmypipe.filter.AbstractFilter;
@@ -16,11 +17,21 @@ public class LineSpinner extends AbstractFilter<Line, Line> {
 		super(input, output);
 		_lines = new LinkedList<>();
 	}
+	
+	public LineSpinner(Readable<Line> input) throws InvalidParameterException {
+		super(input);
+		_lines = new LinkedList<>();
+	}
+	
+	public LineSpinner(Writeable<Line> output) throws InvalidParameterException {
+		super(output);
+		_lines = new LinkedList<>();
+	}
 
 	@Override
 	public Line read() throws StreamCorruptedException {
 		if(_lines.isEmpty()) {
-			processLine(this.readInput());
+			processLine(this.readInput(), l -> _lines.add(l));
 		}
 		
 		if(_lines.isEmpty()) {
@@ -30,7 +41,7 @@ public class LineSpinner extends AbstractFilter<Line, Line> {
 		}
 	}
 
-	private void processLine(Line line) {
+	private void processLine(Line line, Consumer<Line> consumer) {
 		if(line != null) {
 			int nrOfWords = line.getWords().size();
 			for(int i = 0; i < nrOfWords; ++i) {
@@ -38,16 +49,25 @@ public class LineSpinner extends AbstractFilter<Line, Line> {
 				for(int j = 0; j < nrOfWords; ++j) {
 					newLine.addWord(line.getWords().get( (i+j) % nrOfWords));
 				}
-				_lines.add(newLine);
+				consumer.accept(newLine);
 			}
 		}
 		
 	}
 
 	@Override
-	public void write(Line value) throws StreamCorruptedException {
-		// TODO Auto-generated method stub
+	public void write(Line line) throws StreamCorruptedException {
+		if(line == null) {
+			this.writeOutput(null);
+		}
 		
+		processLine(line, l -> {
+			try {
+				this.writeOutput(l);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	@Override

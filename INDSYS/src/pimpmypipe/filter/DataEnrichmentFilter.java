@@ -3,9 +3,6 @@ package pimpmypipe.filter;
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
 
-import javax.print.attribute.standard.OutputDeviceAssigned;
-
-import pimpmypipe.interfaces.IOable;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
@@ -54,7 +51,7 @@ public abstract class DataEnrichmentFilter<in, out>  extends AbstractFilter<in, 
                     m_TempWriteEntity = null;
                 }
             }else {
-                if (m_TempWriteEntity != null) writeOutput(m_TempWriteEntity);
+                if (m_TempWriteEntity != null) writeOutput(preSend(m_TempWriteEntity));
                 sendEndSignal();
             }
         }

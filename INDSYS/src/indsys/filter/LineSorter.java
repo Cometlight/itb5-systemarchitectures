@@ -16,6 +16,14 @@ public class LineSorter extends AbstractFilter<Line, Line> {
 	public LineSorter(Readable<Line> input, Writeable<Line> output) throws InvalidParameterException {
 		super(input, output);
 	}
+	
+	public LineSorter(Readable<Line> input) throws InvalidParameterException {
+		super(input);
+	}
+	
+	public LineSorter(Writeable<Line> output) throws InvalidParameterException {
+		super(output);
+	}
 
 	@Override
 	public Line read() throws StreamCorruptedException {
@@ -48,8 +56,21 @@ public class LineSorter extends AbstractFilter<Line, Line> {
 	}
 
 	@Override
-	public void write(Line value) throws StreamCorruptedException {
-		// TODO Auto-generated method stub
+	public void write(Line line) throws StreamCorruptedException {
+		if(_lines == null) {
+			_lines = new LinkedList<>();
+		}
+		if(line == null) {
+			if(!_lines.isEmpty()) {
+				ListIterator<Line> it = _lines.listIterator();
+				while(it.hasNext()) {
+					this.writeOutput(it.next());
+					it.remove();
+				}
+			}
+		} else {
+			insertLine(line);
+		}
 
 	}
 

@@ -4,21 +4,35 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
 
+import indsys.filter.AlignedLineBuilder;
+import indsys.filter.EbookLineReader;
 import indsys.filter.EbookReader;
 import indsys.filter.LineBuilder;
+import indsys.filter.LineFileWriter;
 import indsys.filter.LineFilter;
 import indsys.filter.LineSorter;
 import indsys.filter.LineSpinner;
 import indsys.filter.LineToString;
+import indsys.filter.WordBuilder;
 import indsys.types.Line;
+import indsys.types.TextAlignment;
+import indsys.types.Word;
+import pimpmypipe.filter.SpreadFilter;
 import pimpmypipe.interfaces.Writeable;
 
-public class App {
+public class TaskB {
 
 	public static void main(String[] args) {
 		try {
+			// TODO: LineFIlter vor LineSorter !!!!!!!!!!!!!!!!!!!!!!!!!!!
+			
 			EbookReader ebookReader = new EbookReader("aliceInWonderland_short.txt");
-			LineBuilder lineBuilder = new LineBuilder(ebookReader, new Writeable<Line>() {
+			WordBuilder wordBuilder = new WordBuilder(ebookReader, value -> {});
+			AlignedLineBuilder alignedLineBuilder = new AlignedLineBuilder(TextAlignment.Center, 80, wordBuilder);
+			
+			LineFileWriter lineFileWriter = new LineFileWriter("outputB1.txt", alignedLineBuilder);
+			
+			LineBuilder lineBuilder = new LineBuilder(lineFileWriter, new Writeable<Line>() {
 
 				@Override
 				public void write(Line value) throws StreamCorruptedException {
@@ -58,7 +72,7 @@ public class App {
 				}
 			});
 			String line;
-			while( (line = lineToString.read()) != null) {
+			while((line = lineToString.read()) != null) {
 				System.out.println(line);
 			}
 					
