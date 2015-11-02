@@ -2,14 +2,25 @@ package itb5.atm;
 
 import itb5.atm.IATM;
 import itb5.atm.IATMFactory;
+
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class Program {
     public static void main(String[] args) {
         System.out.println("Hello ATM!");
 
-        IATMFactory atmFactory = (IATMFactory)Naming.lookup("rmi://localhost:1337/atmfactory");
-        IATM atm = atmFactory.createATM();
+        IATMFactory atmFactory;
+        IATM atm = null;
+		try {
+			atmFactory = (IATMFactory)Naming.lookup("rmi://localhost:1337/atmfactory");
+			atm = atmFactory.createATM();
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			e.printStackTrace();
+		}
+        
 
         // get initial account balance
         System.out.println("Initial Balances");
