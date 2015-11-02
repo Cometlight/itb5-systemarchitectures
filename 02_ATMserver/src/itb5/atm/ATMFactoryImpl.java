@@ -2,12 +2,8 @@ package itb5.atm;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
-import itb5.atm.IATM;
-import itb5.atm.IATMFactory;
-
-public class ATMFactoryImpl extends UnicastRemoteObject implements IATMFactory, Serializable {
+public class ATMFactoryImpl implements IATMFactory, Serializable {
 	protected ATMFactoryImpl() throws RemoteException {
 		super();
 	}

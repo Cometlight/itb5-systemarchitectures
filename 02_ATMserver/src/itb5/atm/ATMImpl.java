@@ -1,10 +1,10 @@
 package itb5.atm;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 
-public class ATMImpl extends UnicastRemoteObject implements IATM {
+public class ATMImpl implements IATM, Serializable {
 	private static final long serialVersionUID = 1L;
 	private Map<Integer, Account> _accounts;
 
