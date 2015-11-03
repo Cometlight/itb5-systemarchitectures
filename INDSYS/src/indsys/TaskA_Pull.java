@@ -14,7 +14,7 @@ import indsys.filter.LineToString;
 import indsys.types.Line;
 import pimpmypipe.interfaces.Writeable;
 
-public class TaskA {
+public class TaskA_Pull {
 
 	public static void main(String[] args) {
 		try {

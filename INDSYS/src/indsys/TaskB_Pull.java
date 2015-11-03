@@ -20,7 +20,7 @@ import indsys.types.Word;
 import pimpmypipe.filter.SpreadFilter;
 import pimpmypipe.interfaces.Writeable;
 
-public class TaskB {
+public class TaskB_Pull {
 
 	public static void main(String[] args) {
 		try {

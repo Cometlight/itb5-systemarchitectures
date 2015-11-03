@@ -1,7 +1,10 @@
 package indsys.filter;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import indsys.types.Line;
 import pimpmypipe.filter.DataEnrichmentFilter;
@@ -33,8 +36,9 @@ public class LineBuilder extends DataEnrichmentFilter<String, Line> {
 		if(nextVal == null) {
 			return true;
 		}
-		
-		entity.setWords(Arrays.asList(nextVal.trim().split(_regex)));
+		List<String> words = new ArrayList<>(Arrays.asList(nextVal.trim().split(_regex)));
+		words.removeAll(Arrays.asList("", null));
+		entity.setWords(words);
 		return true;
 	}
 

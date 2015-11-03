@@ -20,9 +20,16 @@ import indsys.types.Word;
 import pimpmypipe.filter.SpreadFilter;
 import pimpmypipe.interfaces.Writeable;
 
-public class TaskBWrite {
+public class TaskB_Push {
+	private static final String DEFAULT_FILE_NAME = "output_TaskA_Push.txt";
 
 	public static void main(String[] args) {
+		String fileName;
+		if(args.length >= 3) {
+			fileName = args[2];
+		} else {
+			fileName = DEFAULT_FILE_NAME;
+		}
 		try {
 			LineToString lineToString = new LineToString(new Writeable<String>() {
 				
