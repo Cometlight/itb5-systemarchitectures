@@ -3,12 +3,15 @@ package indsys.filter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import pimpmypipe.filter.DataTransformationFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 public class LineFileWriter extends DataTransformationFilter<String> {
+	private static final Logger _log = Logger.getLogger(LineFileWriter.class.getName());
 	private FileWriter _fileWriter;
 
 	public LineFileWriter(String fileName, Readable<String> input, Writeable<String> output)
@@ -31,7 +34,7 @@ public class LineFileWriter extends DataTransformationFilter<String> {
 		try {
 			_fileWriter = new FileWriter(fileName);
 		} catch (IOException e) {
-			e.printStackTrace();
+			_log.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -43,7 +46,7 @@ public class LineFileWriter extends DataTransformationFilter<String> {
 					_fileWriter.flush();
 					_fileWriter.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					_log.log(Level.SEVERE, e.getMessage(), e);
 				}
 				_fileWriter = null;
 			}
@@ -52,7 +55,7 @@ public class LineFileWriter extends DataTransformationFilter<String> {
 				_fileWriter.write(entity + System.lineSeparator());
 				_fileWriter.flush();
 			} catch (IOException e) {
-				e.printStackTrace();
+				_log.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
 

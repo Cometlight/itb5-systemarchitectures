@@ -3,7 +3,6 @@ package indsys.filter;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import indsys.types.Line;
@@ -11,24 +10,20 @@ import pimpmypipe.filter.DataEnrichmentFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
-// TODO: split: reading in lines as a whole + split lines into words
 public class LineBuilder extends DataEnrichmentFilter<String, Line> {
-	private int _lineNumber;
+	private int _lineNumber = 1;
 	private final String _regex = "[^a-zA-Z0-9\\-']+";
 
 	public LineBuilder(Readable<String> input, Writeable<Line> output) throws InvalidParameterException {
 		super(input, output);
-		_lineNumber = 1;
 	}
 	
 	public LineBuilder(Writeable<Line> output) throws InvalidParameterException {
 		super(output);
-		_lineNumber = 1;
 	}
 	
 	public LineBuilder(Readable<String> input) throws InvalidParameterException {
 		super(input);
-		_lineNumber = 1;
 	}
 
 	@Override
@@ -36,8 +31,15 @@ public class LineBuilder extends DataEnrichmentFilter<String, Line> {
 		if(nextVal == null) {
 			return true;
 		}
+		
 		List<String> words = new ArrayList<>(Arrays.asList(nextVal.trim().split(_regex)));
 		words.removeAll(Arrays.asList("", null));
+		
+		if(words.isEmpty()) {
+			entity.setLineNumber(_lineNumber++);
+			return false;
+		}
+		
 		entity.setWords(words);
 		return true;
 	}

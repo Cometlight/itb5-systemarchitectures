@@ -6,7 +6,6 @@ import java.security.InvalidParameterException;
 import indsys.types.TextAlignment;
 import indsys.types.Word;
 import pimpmypipe.filter.AbstractFilter;
-import pimpmypipe.filter.DataEnrichmentFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
@@ -19,51 +18,27 @@ public class AlignedLineBuilder extends AbstractFilter<Word, String> {
 	public AlignedLineBuilder(TextAlignment textAlignment, int lineLength, Readable<Word> input,
 			Writeable<String> output) throws InvalidParameterException {
 		super(input, output);
-		_textAlignment = textAlignment;
-		_lineLength = lineLength;
-		_currentLine = new StringBuilder();
+		init(textAlignment, lineLength);
 	}
 
 	public AlignedLineBuilder(TextAlignment textAlignment, int lineLength, Writeable<String> output)
 			throws InvalidParameterException {
 		super(output);
-		_textAlignment = textAlignment;
-		_lineLength = lineLength;
-		_currentLine = new StringBuilder();
+		init(textAlignment, lineLength);
 	}
 
 	public AlignedLineBuilder(TextAlignment textAlignment, int lineLength, Readable<Word> input)
 			throws InvalidParameterException {
 		super(input);
+		init(textAlignment, lineLength);
+	}
+
+	private void init(TextAlignment textAlignment, int lineLength) {
 		_textAlignment = textAlignment;
 		_lineLength = lineLength;
 		_currentLine = new StringBuilder();
 	}
 
-	@Override
-	public String read() throws StreamCorruptedException {
-		Word word;
-		while ((word = this.readInput()) != null) {
-			if (_currentLine.length() + word.getValue().length() <= _lineLength) {
-				_currentLine.append(word.getValue()).append(SPACER);
-			} else {
-				String finalLine = _currentLine.toString();
-				_currentLine.setLength(0);
-				_currentLine.append(word.getValue()).append(SPACER);
-				return alignLine(finalLine);
-			}
-		}
-
-		// word == null
-		if (_currentLine.length() > 0) {
-			String finalLine = _currentLine.toString();
-			_currentLine.setLength(0);
-			return alignLine(finalLine);
-		} else {
-			return null;
-		}
-	}
-	
 	private String alignLine(String line) {
 		line = line.trim();
 		int nrOfSpaces = _lineLength - line.length();
@@ -85,19 +60,37 @@ public class AlignedLineBuilder extends AbstractFilter<Word, String> {
 	}
 
 	private String padLeft(String text, int nrOfSpaces) {
-		String pad = "";
-		for(int i = 0; i < nrOfSpaces; ++i) {
-			pad += " ";
-		}
+		String pad = new String(new char[nrOfSpaces]).replace('\0', ' ');
 		return text + pad;
 	}
 
 	private String padRight(String text, int nrOfSpaces) {
-		String pad = "";
-		for(int i = 0; i < nrOfSpaces; ++i) {
-			pad += " ";
-		}
+		String pad = new String(new char[nrOfSpaces]).replace('\0', ' ');
 		return pad + text;
+	}
+
+	@Override
+	public String read() throws StreamCorruptedException {
+		Word word;
+		while ((word = this.readInput()) != null) {
+			if (_currentLine.length() + word.getValue().length() <= _lineLength) {
+				_currentLine.append(word.getValue()).append(SPACER);
+			} else {
+				String finalLine = _currentLine.toString();
+				_currentLine.setLength(0);
+				_currentLine.append(word.getValue()).append(SPACER);
+				return alignLine(finalLine);
+			}
+		}
+	
+		// word == null
+		if (_currentLine.length() > 0) {
+			String finalLine = _currentLine.toString();
+			_currentLine.setLength(0);
+			return alignLine(finalLine);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -123,8 +116,7 @@ public class AlignedLineBuilder extends AbstractFilter<Word, String> {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
 
 }

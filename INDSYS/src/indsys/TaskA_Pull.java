@@ -1,77 +1,45 @@
 package indsys;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.io.StreamCorruptedException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import indsys.filter.EbookLineReader;
-import indsys.filter.EbookReader;
 import indsys.filter.LineBuilder;
 import indsys.filter.LineFilter;
 import indsys.filter.LineSorter;
 import indsys.filter.LineSpinner;
 import indsys.filter.LineToString;
 import indsys.types.Line;
-import pimpmypipe.interfaces.Writeable;
+import pimpmypipe.interfaces.Readable;
 
 public class TaskA_Pull {
+	private static final Logger _log = Logger.getLogger(TaskA_Pull.class.getName());
 
 	public static void main(String[] args) {
-		try {
-			EbookLineReader ebookLineReader = new EbookLineReader("aliceInWonderland_short.txt");
-			LineBuilder lineBuilder = new LineBuilder(ebookLineReader, new Writeable<Line>() {
-
-				@Override
-				public void write(Line value) throws StreamCorruptedException {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			LineSpinner lineSpinner = new LineSpinner(lineBuilder, new Writeable<Line>() {
-
-				@Override
-				public void write(Line value) throws StreamCorruptedException {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			LineSorter lineSorter = new LineSorter(lineSpinner, new Writeable<Line>() {
-				@Override
-				public void write(Line value) throws StreamCorruptedException {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			LineFilter lineFilter = new LineFilter(lineSorter, new Writeable<Line>() {
-
-				@Override
-				public void write(Line value) throws StreamCorruptedException {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			LineToString lineToString = new LineToString(lineFilter, new Writeable<String>() {
-
-				@Override
-				public void write(String value) throws StreamCorruptedException {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-			String line;
-			while( (line = lineToString.read()) != null) {
-				System.out.println(line);
-			}
-					
-					
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(args.length < 1) {
+			System.out.println("Please provide the file name of the source text as parameter.");
+			return;
+		}
+		String sourceFileName = args[0];
+		
+		if(!new File(sourceFileName).exists()) {
+			System.out.println("'" + sourceFileName + "' not found. Please provide a valid file name of the source text.");
+			return;
 		}
 		
-
+		try {
+			EbookLineReader ebookLineReader = new EbookLineReader(sourceFileName);
+			LineBuilder lineBuilder = new LineBuilder(ebookLineReader);
+			LineSpinner lineSpinner = new LineSpinner(lineBuilder);
+			LineFilter lineFilter = new LineFilter((Readable<Line>)lineSpinner);
+			LineSorter lineSorter = new LineSorter((Readable<Line>)lineFilter);
+			LineToString lineToString = new LineToString(lineSorter);
+			ConsoleSink<String> consoleSink = new ConsoleSink<>(lineToString);
+		} catch (IOException e) {
+			_log.log(Level.SEVERE, e.getMessage(), e);
+		}
 	}
 
 }

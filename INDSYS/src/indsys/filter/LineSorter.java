@@ -35,11 +35,7 @@ public class LineSorter extends AbstractFilter<Line, Line> {
 			}
 		}
 		
-		if(_lines.isEmpty()) {
-			return null;
-		} else {
-			return _lines.pop();
-		}
+		return _lines.isEmpty() ? null : _lines.pop();
 	}
 
 	private void insertLine(Line line) {
@@ -71,13 +67,10 @@ public class LineSorter extends AbstractFilter<Line, Line> {
 		} else {
 			insertLine(line);
 		}
-
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
-
 }

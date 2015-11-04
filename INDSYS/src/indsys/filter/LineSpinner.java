@@ -4,6 +4,8 @@ import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import indsys.types.Line;
 import pimpmypipe.filter.AbstractFilter;
@@ -11,21 +13,20 @@ import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 public class LineSpinner extends AbstractFilter<Line, Line> {
-	private LinkedList<Line> _lines;
+	private static final Logger _log = Logger.getLogger(LineSpinner.class.getName());
+	
+	private LinkedList<Line> _lines = new LinkedList<>();
 
 	public LineSpinner(Readable<Line> input, Writeable<Line> output) throws InvalidParameterException {
 		super(input, output);
-		_lines = new LinkedList<>();
 	}
 	
 	public LineSpinner(Readable<Line> input) throws InvalidParameterException {
 		super(input);
-		_lines = new LinkedList<>();
 	}
 	
 	public LineSpinner(Writeable<Line> output) throws InvalidParameterException {
 		super(output);
-		_lines = new LinkedList<>();
 	}
 
 	@Override
@@ -34,11 +35,7 @@ public class LineSpinner extends AbstractFilter<Line, Line> {
 			processLine(this.readInput(), l -> _lines.add(l));
 		}
 		
-		if(_lines.isEmpty()) {
-			return null;
-		} else {
-			return _lines.pop();
-		}
+		return _lines.isEmpty() ? null : _lines.pop();
 	}
 
 	private void processLine(Line line, Consumer<Line> consumer) {
@@ -52,7 +49,6 @@ public class LineSpinner extends AbstractFilter<Line, Line> {
 				consumer.accept(newLine);
 			}
 		}
-		
 	}
 
 	@Override
@@ -65,16 +61,13 @@ public class LineSpinner extends AbstractFilter<Line, Line> {
 			try {
 				this.writeOutput(l);
 			} catch (Exception e) {
-				e.printStackTrace();
+				_log.log(Level.SEVERE, e.getMessage(), e);
 			}
 		});
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
-
-
 }

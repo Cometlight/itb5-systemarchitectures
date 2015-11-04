@@ -1,11 +1,11 @@
 package indsys;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.io.StreamCorruptedException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import indsys.filter.AlignedLineBuilder;
-import indsys.filter.EbookLineReader;
 import indsys.filter.EbookReader;
 import indsys.filter.LineBuilder;
 import indsys.filter.LineFileWriter;
@@ -16,53 +16,45 @@ import indsys.filter.LineToString;
 import indsys.filter.WordBuilder;
 import indsys.types.Line;
 import indsys.types.TextAlignment;
-import indsys.types.Word;
-import pimpmypipe.filter.SpreadFilter;
 import pimpmypipe.interfaces.Writeable;
 
 public class TaskB_Push {
-	private static final String DEFAULT_FILE_NAME = "output_TaskA_Push.txt";
+	private static final Logger _log = Logger.getLogger(TaskB_Push.class.getName());
 
 	public static void main(String[] args) {
-		String fileName;
-		if(args.length >= 3) {
-			fileName = args[2];
-		} else {
-			fileName = DEFAULT_FILE_NAME;
+		if (args.length < 2) {
+			System.out.println(
+					"Please provide the file name of the source text as first parameter, the name of the output file as second parameter, the line width as the third parameter, and the alignment [LEFT, CENTER, RIGHT] as the fourth parameter.");
+			return;
 		}
-		try {
-			LineToString lineToString = new LineToString(new Writeable<String>() {
-				
-				@Override
-				public void write(String value) throws StreamCorruptedException {
-					System.out.println(value);
-					
-				}
-			});
-			
-			LineFilter lineFilter = new LineFilter(lineToString);
-			
-			LineSorter lineSorter = new LineSorter((Writeable)lineFilter);
-			
-			LineSpinner lineSpinner = new LineSpinner((Writeable)lineSorter);
-			
-			LineBuilder lineBuilder = new LineBuilder(lineSpinner);
-			
-			LineFileWriter lineFileWriter = new LineFileWriter("output.txt", lineBuilder);
-			AlignedLineBuilder alignedLineBuilder = new AlignedLineBuilder(TextAlignment.Center, 80, lineFileWriter);
-			
-			WordBuilder wordBuilder = new WordBuilder(alignedLineBuilder);
-			EbookReader ebookReader = new EbookReader("aliceInWonderland_short.txt", wordBuilder);
-			
-					
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 
+		String sourceFileName = args[0];
+
+		if (!new File(sourceFileName).exists()) {
+			System.out.println(
+					"'" + sourceFileName + "' not found. Please provide a valid file name of the source text.");
+			return;
+		}
+
+		String outputFileName = args[1];
+		
+		int lineWidth = Integer.valueOf(args[2]);
+		
+		TextAlignment textAlignment = TextAlignment.valueOf(args[3]);
+
+		try {
+			LineToString lineToString = new LineToString(new ConsoleSink<String>());
+			LineFilter lineFilter = new LineFilter(lineToString);
+			LineSorter lineSorter = new LineSorter((Writeable<Line>)lineFilter);
+			LineSpinner lineSpinner = new LineSpinner((Writeable<Line>)lineSorter);
+			LineBuilder lineBuilder = new LineBuilder(lineSpinner);
+			LineFileWriter lineFileWriter = new LineFileWriter(outputFileName, lineBuilder);
+			AlignedLineBuilder alignedLineBuilder = new AlignedLineBuilder(textAlignment, lineWidth, lineFileWriter);
+			WordBuilder wordBuilder = new WordBuilder(alignedLineBuilder);
+			EbookReader ebookReader = new EbookReader(sourceFileName, wordBuilder);
+		} catch (IOException e) {
+			_log.log(Level.SEVERE, e.getMessage(), e);
+		}
 	}
 
 }

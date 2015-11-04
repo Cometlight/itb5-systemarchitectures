@@ -2,8 +2,7 @@ package indsys;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StreamCorruptedException;
-import java.util.logging.LogManager;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import indsys.filter.EbookLineReader;
@@ -16,6 +15,8 @@ import indsys.types.Line;
 import pimpmypipe.interfaces.Writeable;
 
 public class TaskA_Push {
+	private static final Logger _log = Logger.getLogger(TaskA_Push.class.getName());
+	
 	public static void main(String[] args) {
 		if(args.length < 1) {
 			System.out.println("Please provide the file name of the source text as parameter.");
@@ -29,19 +30,14 @@ public class TaskA_Push {
 		}
 		
 		try {
-			LineToString lineToString = new LineToString(new Writeable<String>() {
-				@Override
-				public void write(String value) throws StreamCorruptedException {
-					System.out.println(value);
-				}
-			});
+			LineToString lineToString = new LineToString(new ConsoleSink<String>());
 			LineSorter lineSorter = new LineSorter(lineToString);
 			LineFilter lineFilter = new LineFilter((Writeable<Line>) lineSorter);
 			LineSpinner lineSpinner = new LineSpinner((Writeable<Line>) lineFilter);
 			LineBuilder lineBuilder = new LineBuilder(lineSpinner);
 			EbookLineReader ebookLineReader = new EbookLineReader(sourceFileName, lineBuilder);
 		} catch (IOException e) {
-			e.printStackTrace();
+			_log.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 

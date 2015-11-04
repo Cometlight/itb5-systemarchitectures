@@ -25,11 +25,7 @@ public class LineToString extends AbstractFilter<Line, String> {
 	@Override
 	public String read() throws StreamCorruptedException {
 		Line line = this.readInput();
-		if(line == null) {
-			return null;
-		} else {
-			return lineToString(line);
-		}
+		return line == null ? null : lineToString(line);
 	}
 	
 	private String lineToString(Line line) {
@@ -46,9 +42,6 @@ public class LineToString extends AbstractFilter<Line, String> {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
-
-
 }

@@ -5,11 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 public class EbookLineReader implements Readable<String> {
+	private static final Logger _log = Logger.getLogger(EbookLineReader.class.getName());
+	
 	private FileReader _fileReader;
 	private BufferedReader _bufferedReader;
 	private Writeable<String> _out;
@@ -42,9 +46,8 @@ public class EbookLineReader implements Readable<String> {
 		try {
 			return _bufferedReader.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
+			_log.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
 	}
-
 }

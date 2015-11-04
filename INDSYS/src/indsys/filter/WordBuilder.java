@@ -8,22 +8,19 @@ import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 public class WordBuilder extends DataEnrichmentFilter<Character, Word> {
-	private StringBuilder _currentWord;
+	private StringBuilder _currentWord = new StringBuilder();
 	private final String _regex = "[a-zA-Z0-9\\-']";
 	
 	public WordBuilder(Readable<Character> input, Writeable<Word> output) throws InvalidParameterException {
 		super(input, output);
-		_currentWord = new StringBuilder();
 	}
 	
 	public WordBuilder(Writeable<Word> output) throws InvalidParameterException {
 		super(output);
-		_currentWord = new StringBuilder();
 	}
 	
 	public WordBuilder(Readable<Character> input) throws InvalidParameterException {
 		super(input);
-		_currentWord = new StringBuilder();
 	}
 
 	@Override
