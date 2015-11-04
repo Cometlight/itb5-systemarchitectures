@@ -3,6 +3,8 @@ package indsys;
 import java.io.File;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import indsys.filter.EbookLineReader;
 import indsys.filter.LineBuilder;
