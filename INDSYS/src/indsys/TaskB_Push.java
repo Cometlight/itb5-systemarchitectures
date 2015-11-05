@@ -44,9 +44,9 @@ public class TaskB_Push {
 
 		try {
 			LineToString lineToString = new LineToString(new ConsoleSink<String>());
-			LineFilter lineFilter = new LineFilter(lineToString);
-			LineSorter lineSorter = new LineSorter((Writeable<Line>)lineFilter);
-			LineSpinner lineSpinner = new LineSpinner((Writeable<Line>)lineSorter);
+			LineSorter lineSorter = new LineSorter(lineToString);
+			LineFilter lineFilter = new LineFilter((Writeable<Line>)lineSorter);
+			LineSpinner lineSpinner = new LineSpinner((Writeable<Line>)lineFilter);
 			LineBuilder lineBuilder = new LineBuilder(lineSpinner);
 			LineFileWriter lineFileWriter = new LineFileWriter(outputFileName, lineBuilder);
 			AlignedLineBuilder alignedLineBuilder = new AlignedLineBuilder(textAlignment, lineWidth, lineFileWriter);
