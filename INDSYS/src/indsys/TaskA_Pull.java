@@ -30,18 +30,13 @@ public class TaskA_Pull {
 		}
 		
 		try {
-			long start = System.nanoTime();
 			EbookLineReader ebookLineReader = new EbookLineReader(sourceFileName);
 			LineBuilder lineBuilder = new LineBuilder(ebookLineReader);
 			LineSpinner lineSpinner = new LineSpinner(lineBuilder);
 			LineFilter lineFilter = new LineFilter((Readable<Line>)lineSpinner);
 			LineSorter lineSorter = new LineSorter((Readable<Line>)lineFilter);
 			LineToString lineToString = new LineToString(lineSorter);
-			long beforePrint = System.nanoTime();
 			ConsoleSink<String> consoleSink = new ConsoleSink<>(lineToString);
-			long end = System.nanoTime();
-			System.out.println("Took " + (end - start) * 1.0 / 1000 / 1000 / 1000 + " seconds.");
-			System.out.println("(" + (beforePrint - start) * 1.0 / 1000 / 1000 / 1000 + " without printing to console)");
 		} catch (IOException e) {
 			_log.log(Level.SEVERE, e.getMessage(), e);
 		}
