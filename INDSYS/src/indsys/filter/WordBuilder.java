@@ -2,20 +2,20 @@ package indsys.filter;
 
 import java.security.InvalidParameterException;
 
-import indsys.types.Word;
+import indsys.types.MutableString;
 import pimpmypipe.filter.DataEnrichmentFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
-public class WordBuilder extends DataEnrichmentFilter<Character, Word> {
+public class WordBuilder extends DataEnrichmentFilter<Character, MutableString> {
 	private StringBuilder _currentWord = new StringBuilder();
-	private final String _regex = "[a-zA-Z0-9\\-']";
+	private final String _regex = "[a-zA-Z0-9\\-:\\.,;']";
 	
-	public WordBuilder(Readable<Character> input, Writeable<Word> output) throws InvalidParameterException {
+	public WordBuilder(Readable<Character> input, Writeable<MutableString> output) throws InvalidParameterException {
 		super(input, output);
 	}
 	
-	public WordBuilder(Writeable<Word> output) throws InvalidParameterException {
+	public WordBuilder(Writeable<MutableString> output) throws InvalidParameterException {
 		super(output);
 	}
 	
@@ -24,8 +24,9 @@ public class WordBuilder extends DataEnrichmentFilter<Character, Word> {
 	}
 
 	@Override
-	protected boolean fillEntity(Character nextVal, Word entity) {
+	protected boolean fillEntity(Character nextVal, MutableString entity) {
 		if(nextVal == null) {
+			entity.setValue(null);
 			return true;
 		}
 
@@ -45,12 +46,12 @@ public class WordBuilder extends DataEnrichmentFilter<Character, Word> {
 	}
 
 	@Override
-	protected Word getNewEntityObject() {
-		return new Word();
+	protected MutableString getNewEntityObject() {
+		return new MutableString();
 	}
 	
 	@Override
-	protected Word preSend(Word entity) {
+	protected MutableString preSend(MutableString entity) {
 		if(entity.getValue() == null) {
 			return null;
 		} else {

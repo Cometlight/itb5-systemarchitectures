@@ -1,7 +1,7 @@
 package indsys.types;
 
 /**
- * Represents a mutable String. Its value can never be null.
+ * Represents a mutable String.
  */
 public class MutableString {
 	private String _value;
@@ -18,35 +18,25 @@ public class MutableString {
 	 * Creates a new mutable string and sets its initial value to the specified
 	 * value.
 	 * 
-	 * @param initialValue the initial value of the string; may not be null.
+	 * @param initialValue the initial value of the string
 	 */
 	public MutableString(String initialValue) {
-		if (initialValue != null) {
-			this._value = initialValue;
-		} else {
-			this._value = "";
-		}
+		this._value = initialValue;
 	}
 	
 	/**
-	 * Sets the value of the string. If the specified value is null, the 
-	 * mutable string's value is set to the empty string.
+	 * Sets the value of the string.
 	 * 
-	 * @param newValue the new value of the string; may not be null.
+	 * @param newValue the new value of the string; may not be null
 	 */
 	public void setValue(String newValue) {
-		if (newValue != null) {
-			this._value = newValue;
-		} else {
-			this._value = "";
-		}
+		this._value = newValue;
 	}
 	
 	/**
 	 * Gets the value of the string.
 	 * 
-	 * @return the value of the string; it is ensured that the value is not 
-	 * 		null.
+	 * @return the value of the string
 	 */
 	public String getValue() {
 		return this._value;

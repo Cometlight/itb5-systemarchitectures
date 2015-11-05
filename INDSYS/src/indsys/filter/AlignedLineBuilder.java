@@ -3,19 +3,19 @@ package indsys.filter;
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
 
+import indsys.types.MutableString;
 import indsys.types.TextAlignment;
-import indsys.types.Word;
 import pimpmypipe.filter.AbstractFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
-public class AlignedLineBuilder extends AbstractFilter<Word, String> {
+public class AlignedLineBuilder extends AbstractFilter<MutableString, String> {
 	private final String SPACER = " ";
 	private StringBuilder _currentLine;
 	private TextAlignment _textAlignment;
 	private int _lineLength;
 
-	public AlignedLineBuilder(TextAlignment textAlignment, int lineLength, Readable<Word> input,
+	public AlignedLineBuilder(TextAlignment textAlignment, int lineLength, Readable<MutableString> input,
 			Writeable<String> output) throws InvalidParameterException {
 		super(input, output);
 		init(textAlignment, lineLength);
@@ -27,7 +27,7 @@ public class AlignedLineBuilder extends AbstractFilter<Word, String> {
 		init(textAlignment, lineLength);
 	}
 
-	public AlignedLineBuilder(TextAlignment textAlignment, int lineLength, Readable<Word> input)
+	public AlignedLineBuilder(TextAlignment textAlignment, int lineLength, Readable<MutableString> input)
 			throws InvalidParameterException {
 		super(input);
 		init(textAlignment, lineLength);
@@ -45,14 +45,17 @@ public class AlignedLineBuilder extends AbstractFilter<Word, String> {
 
 		if (nrOfSpaces == 0) {
 			return line;
+		} else if (nrOfSpaces < 0) {
+			// a word that is longer than the line
+			nrOfSpaces = 0;
 		}
 
 		switch (_textAlignment) {
-		case Left:
+		case LEFT:
 			return padLeft(line, nrOfSpaces);
-		case Right:
+		case RIGHT:
 			return padRight(line, nrOfSpaces);
-		case Center:
+		case CENTER:
 			return padRight(padLeft(line, nrOfSpaces / 2), nrOfSpaces / 2);
 		default:
 			return null;
@@ -71,7 +74,7 @@ public class AlignedLineBuilder extends AbstractFilter<Word, String> {
 
 	@Override
 	public String read() throws StreamCorruptedException {
-		Word word;
+		MutableString word;
 		while ((word = this.readInput()) != null) {
 			if (_currentLine.length() + word.getValue().length() <= _lineLength) {
 				_currentLine.append(word.getValue()).append(SPACER);
@@ -94,7 +97,7 @@ public class AlignedLineBuilder extends AbstractFilter<Word, String> {
 	}
 
 	@Override
-	public void write(Word word) throws StreamCorruptedException {
+	public void write(MutableString word) throws StreamCorruptedException {
 		if(word == null) {
 			if (_currentLine.length() > 0) {
 				String finalLine = _currentLine.toString();

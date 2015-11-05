@@ -5,6 +5,11 @@ import java.io.StreamCorruptedException;
 import pimpmypipe.interfaces.Writeable;
 import pimpmypipe.interfaces.Readable;
 
+/**
+ * Takes objects of T and prints them to the console.
+ * 
+ * @param <T> the type of objects that are printed to the console.
+ */
 public class ConsoleSink<T> implements Writeable<T> {
 
 	public ConsoleSink() {

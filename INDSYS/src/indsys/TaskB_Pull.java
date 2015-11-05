@@ -40,7 +40,7 @@ public class TaskB_Pull {
 		
 		int lineWidth = Integer.valueOf(args[2]);
 		
-		TextAlignment textAlignment = TextAlignment.valueOf(args[3]);
+		TextAlignment textAlignment = TextAlignment.valueOf(args[3].toUpperCase());
 
 		try {
 			EbookReader ebookReader = new EbookReader(sourceFileName);

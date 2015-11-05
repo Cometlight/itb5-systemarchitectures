@@ -1,9 +1,9 @@
 package indsys.types;
 
 public enum TextAlignment {
-    Left("Left"),
-    Right("Right"),
-    Center("Center");
+    LEFT("LEFT"),
+    RIGHT("RIGHT"),
+    CENTER("CENTER");
     
     private String _name;
 	
