@@ -41,20 +41,39 @@ public class OpeningOperator  extends DataTransformationFilter<ImageWrapper> {
 
 	@Override
 	protected void process(ImageWrapper entity) {
-		PlanarImage image = entity.getImage();
-		for(int i = 0; i < _nrOfProcessingCycles; ++i) {
-			ParameterBlock pb = new ParameterBlock();
-			pb.addSource(image);
-			pb.add(_kernel);
-			image = JAI.create("erode", pb);
+		entity.setImage(this.openingOperator(entity.getImage(), _nrOfProcessingCycles, _kernel));
+	}
+	
+	/**
+	 * Executes the opening operator on the given image multiple times with the
+	 * given kernel.
+	 * @param image the image to execute the opening operator on
+	 * @param cycles number of processing cycles
+	 * @param kernel the kernel to use for the operator
+	 * @return the processed image
+	 */
+	private PlanarImage openingOperator(PlanarImage image, int cycles, KernelJAI kernel) {
+		for (int i = 0; i < cycles; ++i) {
+			image = this.processImage(image, "erode",  kernel);
 		}
-		for(int i = 0; i < _nrOfProcessingCycles; ++i) {
-			ParameterBlock pb = new ParameterBlock();
-			pb.addSource(image);
-			pb.add(_kernel);
-			image = JAI.create("dilate", pb);
+		for (int i = 0; i < cycles; ++i) {
+			image = this.processImage(image, "dilate", kernel);
 		}
-		entity.setImage(image);
+		return image;
+	}
+	
+	/**
+	 * Executes an action on the given image with the given kernel
+	 * @param image the image to process
+	 * @param method the method to perform
+	 * @param kernel the kernel to use
+	 * @return the processed image
+	 */
+	private PlanarImage processImage(PlanarImage image, String method, KernelJAI kernel) {
+		ParameterBlock pb = new ParameterBlock();
+		pb.addSource(image);
+		pb.add(kernel);
+		return JAI.create(method, pb);
 	}
 
 }

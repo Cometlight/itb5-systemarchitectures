@@ -4,9 +4,6 @@ import java.awt.Rectangle;
 import java.io.StreamCorruptedException;
 import java.util.LinkedList;
 
-import javax.media.jai.KernelJAI;
-import javax.media.jai.PlanarImage;
-
 import itb5.filter.AbstractSink;
 import itb5.filter.CalcCentroidsFilter;
 import itb5.filter.ImageCropper;
@@ -17,7 +14,6 @@ import itb5.filter.OpeningOperator;
 import itb5.filter.ThresholdOperator;
 import itb5.types.Coordinate;
 import itb5.types.ImageWrapper;
-import pimpmypipe.filter.DataConversionFilter;
 import pimpmypipe.interfaces.Readable;
 
 public class ImageProcessing {

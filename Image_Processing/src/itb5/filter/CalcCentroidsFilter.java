@@ -117,7 +117,13 @@ public class CalcCentroidsFilter extends DataEnrichmentFilter<PlanarImage, Linke
 			int xMedian = xValues.get(xValues.size() / 2);
 			int yMedian = yValues.get(yValues.size() / 2);
 			
-			centroids[i] = new Coordinate(xMedian+ (int)_image.getProperty("ThresholdX"), yMedian + (int) _image.getProperty("ThresholdY"));	
+			centroids[i] = new Coordinate(
+					xMedian,
+					//+ 
+					//(int)_image.getProperty("ThresholdX"), 
+					yMedian// + 
+					//(int) _image.getProperty("ThresholdY")
+				);	
 			i++;
 		}
 		return centroids;
