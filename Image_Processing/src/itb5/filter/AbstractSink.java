@@ -6,7 +6,7 @@ import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 public class AbstractSink<T> implements Writeable<T> {
-	
+	public AbstractSink() { }
 
 	public AbstractSink(Readable<T> input) throws StreamCorruptedException {
 		T entity;
@@ -17,7 +17,8 @@ public class AbstractSink<T> implements Writeable<T> {
 	
 	@Override
 	public void write(T value) throws StreamCorruptedException {
-		
+		if(value != null) {
+			System.out.println(value);
+		}
 	}
-
 }
