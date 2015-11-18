@@ -11,7 +11,7 @@ public class AbstractSink<T> implements Writeable<T> {
 	public AbstractSink(Readable<T> input) throws StreamCorruptedException {
 		T entity;
 		while( (entity = input.read()) != null) {
-//			System.out.println(entity);
+			System.out.println(entity);
 		}
 		System.out.println("done");
 	}
@@ -19,7 +19,7 @@ public class AbstractSink<T> implements Writeable<T> {
 	@Override
 	public void write(T value) throws StreamCorruptedException {
 		if(value != null) {
-//			System.out.println(value);
+			System.out.println(value);
 		}
 	}
 }

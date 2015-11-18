@@ -34,12 +34,11 @@ public class ImageProcessing {
 	public static final int THRESHOLD_MAP = 255;
 	
 	public static void main(String[] args) throws StreamCorruptedException {
-//		if(args.length < 1) {
-//			System.out.println("Please provide the desired mode as the first parameter. (\"pull\", \"push\", or \"multithreading\")");
-//			return;
-//		}
-//		String mode = args[0].toLowerCase();
-		String mode = "multithreading";
+		if(args.length < 1) {
+			System.out.println("Please provide the desired mode as the first parameter. (\"pull\", \"push\", or \"multithreading\")");
+			return;
+		}
+		String mode = args[0].toLowerCase();
 		if(mode.equals("pull")) {
 			pull();
 		} else if (mode.equals("push")) {
@@ -55,7 +54,7 @@ public class ImageProcessing {
 		Timer timer = new Timer();
 		timer.start();
 		
-		ImageFileSource imageFileSource = new ImageFileSource(DEFAULT_FILE_PATH, 100);	// passive source
+		ImageFileSource imageFileSource = new ImageFileSource(DEFAULT_FILE_PATH, 1000);	// passive source
 		ImageSaver imageSaver01 = new ImageSaver("step01", imageFileSource);
 		ImageCropper imageCropper = new ImageCropper(RECTANGLE, (Readable<ImageWrapper>)imageSaver01);
 		ImageSaver imageSaver02 = new ImageSaver("step02", (Readable<ImageWrapper>)imageCropper);
@@ -136,7 +135,5 @@ public class ImageProcessing {
 		new Thread(new ImageCropper(RECTANGLE, pipe02, (Writeable<ImageWrapper>)pipe03), "ImageCropper").start();
 		new Thread(new ImageSaver("step01", pipe01, (Writeable<ImageWrapper>)pipe02), "ImageSaver 01").start();
 		new Thread(() -> new ImageFileSource(DEFAULT_FILE_PATH, 100, pipe01), "ImageFileSource").start();
-		
-		System.out.println(":)");
 	}
 }

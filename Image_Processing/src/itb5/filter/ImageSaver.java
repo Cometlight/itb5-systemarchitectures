@@ -29,7 +29,7 @@ public class ImageSaver extends DataTransformationFilter<ImageWrapper> {
 	
 	@Override
 	protected void process(ImageWrapper entity) {
-//		JAI.create("filestore", entity.getImage(), _filePath + ".jpg", "jpeg", null);
+		JAI.create("filestore", entity.getImage(), _filePath + ".jpg", "jpeg", null);
 	}
 
 }
