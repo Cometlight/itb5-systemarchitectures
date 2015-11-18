@@ -12,6 +12,10 @@ import pimpmypipe.filter.DataTransformationFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * First: Erode
+ * Second: Dilate
+ */
 public class OpeningOperator  extends DataTransformationFilter<ImageWrapper> {
 	private KernelJAI _kernel;
 	private int _nrOfProcessingCycles;

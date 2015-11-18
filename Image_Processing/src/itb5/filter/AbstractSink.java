@@ -5,6 +5,9 @@ import java.io.StreamCorruptedException;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * A sink that only prints out the received values.
+ */
 public class AbstractSink<T> implements Writeable<T> {
 	public AbstractSink() { }
 

@@ -10,6 +10,10 @@ import itb5.types.ImageWrapper;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * Reads the specified image from the file system and makes it available n 
+ * times.
+ */
 public class ImageFileSource implements Readable<ImageWrapper> {
 	private static final Logger _log = Logger.getLogger(ImageFileSource.class.getName());
 
@@ -33,6 +37,7 @@ public class ImageFileSource implements Readable<ImageWrapper> {
 	private void writeAll() {
 		try {
 			while (_timesToRead-- > 0) {
+				// return a clone of the image!
 				_out.write(_imageRead.clone());
 			}
 			_out.write(null);
@@ -45,6 +50,8 @@ public class ImageFileSource implements Readable<ImageWrapper> {
 	@Override
 	public ImageWrapper read() throws StreamCorruptedException {
 		if (_timesToRead-- > 0) {
+			// return a clone of the image.. we do not want them to work on the
+			// same image twice
 			return _imageRead.clone();
 		} else {
 			return null;

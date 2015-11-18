@@ -1,5 +1,8 @@
 package itb5.types;
 
+/**
+ * Our implementation of the coordinate required by CalcCentroidsFilter.
+ */
 public class Coordinate implements Comparable<Coordinate> {
 	public int _x;
 	public int _y;
