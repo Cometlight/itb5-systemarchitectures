@@ -43,7 +43,21 @@ public abstract class DataConversionFilter<in, out> extends AbstractFilter<in, o
 
 	@Override
 	public void run() {
-		throw new UnsupportedOperationException();
+        out output = null;//getNewEntityObject();
+        try {
+            do {
+                output = read();
+
+                if (output != null) {
+                    writeOutput(output);
+                }
+            }while(output != null);
+            sendEndSignal();
+        } catch (StreamCorruptedException e) {
+            System.out.print("Thread reports error: ");
+            System.out.println(Thread.currentThread().getId() + " (" + Thread.currentThread().getName() + ")");
+            e.printStackTrace();
+        }
 	}
 	
 }

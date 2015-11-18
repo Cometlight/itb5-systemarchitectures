@@ -33,8 +33,9 @@ public class ImageFileSource implements Readable<ImageWrapper> {
 	private void writeAll() {
 		try {
 			while (_timesToRead-- > 0) {
-				_out.write(_imageRead);
+				_out.write(_imageRead.clone());
 			}
+			_out.write(null);
 		} catch (StreamCorruptedException e) {
 			_log.log(Level.SEVERE, e.getMessage(), e);
 			return;
@@ -44,7 +45,7 @@ public class ImageFileSource implements Readable<ImageWrapper> {
 	@Override
 	public ImageWrapper read() throws StreamCorruptedException {
 		if (_timesToRead-- > 0) {
-			return _imageRead;
+			return _imageRead.clone();
 		} else {
 			return null;
 		}

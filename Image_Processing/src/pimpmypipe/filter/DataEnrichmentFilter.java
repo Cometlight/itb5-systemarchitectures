@@ -75,6 +75,7 @@ public abstract class DataEnrichmentFilter<in, out>  extends AbstractFilter<in, 
                 }else {
                     m_EndOfStream = true;
                     finished = true;
+                    entity = null;	// This awesome LoC was added by us
                 }
             }while(!finished);
             return preSend(entity);
