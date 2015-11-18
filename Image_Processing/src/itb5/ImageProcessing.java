@@ -122,19 +122,21 @@ public class ImageProcessing {
 			}
 			timer.stop();
 			System.out.println(timer.getTotalTimeInSeconds());
-		}).start();
-		new Thread(new AbsoluteCoordinatesConverter(new Coordinate(RECTANGLE.x, RECTANGLE.y), pipe12, (Writeable<LinkedList<Coordinate>>)pipe13)).start();
-		new Thread(new CalcCentroidsFilter((Readable<PlanarImage>)pipe11, (Writeable<LinkedList<Coordinate>>)pipe12)).start();
-		new Thread(new ImageWrapperToPlanarImageConverter(pipe10, pipe11)).start();
-		new Thread(new ImageSaver("step05", pipe09, (Writeable<ImageWrapper>)pipe10)).start();
-		new Thread(new OpeningOperator(JAIKernels.circle7, 2, pipe08, (Writeable<ImageWrapper>)pipe09)).start();
-		new Thread(new ImageSaver("step04", pipe07, (Writeable<ImageWrapper>)pipe08)).start();
-		new Thread(new MedianOperator(pipe06, (Writeable<ImageWrapper>)pipe07)).start();
-		new Thread(new ImageSaver("step03", pipe05, (Writeable<ImageWrapper>)pipe06)).start();
-		new Thread(new ThresholdOperator(THRESHOLD_LOW, THRESHOLD_HIGH, THRESHOLD_MAP, pipe04, (Writeable<ImageWrapper>)pipe05)).start();
-		new Thread(new ImageSaver("step02", pipe03, (Writeable<ImageWrapper>)pipe04)).start();
-		new Thread(new ImageCropper(RECTANGLE, pipe02, (Writeable<ImageWrapper>)pipe03)).start();
-		new Thread(new ImageSaver("step01", pipe01, (Writeable<ImageWrapper>)pipe02)).start();
-		new Thread(() -> new ImageFileSource(DEFAULT_FILE_PATH, 100, pipe01)).start();
+		}, "sink").start();
+		new Thread(new AbsoluteCoordinatesConverter(new Coordinate(RECTANGLE.x, RECTANGLE.y), pipe12, (Writeable<LinkedList<Coordinate>>)pipe13), "coordinate converter").start();
+		new Thread(new CalcCentroidsFilter((Readable<PlanarImage>)pipe11, (Writeable<LinkedList<Coordinate>>)pipe12), "calcCentroidsFilter").start();
+		new Thread(new ImageWrapperToPlanarImageConverter(pipe10, pipe11), "imageWrapperToPlanarImageConverter").start();
+		new Thread(new ImageSaver("step05", pipe09, (Writeable<ImageWrapper>)pipe10), "ImageSaver 05").start();
+		new Thread(new OpeningOperator(JAIKernels.circle7, 2, pipe08, (Writeable<ImageWrapper>)pipe09), "OpeningOperator").start();
+		new Thread(new ImageSaver("step04", pipe07, (Writeable<ImageWrapper>)pipe08), "ImageSaver 04").start();
+		new Thread(new MedianOperator(pipe06, (Writeable<ImageWrapper>)pipe07), "MedianOperator").start();
+		new Thread(new ImageSaver("step03", pipe05, (Writeable<ImageWrapper>)pipe06), "ImageSaver 03").start();
+		new Thread(new ThresholdOperator(THRESHOLD_LOW, THRESHOLD_HIGH, THRESHOLD_MAP, pipe04, (Writeable<ImageWrapper>)pipe05), "ThresholdOperator").start();
+		new Thread(new ImageSaver("step02", pipe03, (Writeable<ImageWrapper>)pipe04), "ImageSaver 02").start();
+		new Thread(new ImageCropper(RECTANGLE, pipe02, (Writeable<ImageWrapper>)pipe03), "ImageCropper").start();
+		new Thread(new ImageSaver("step01", pipe01, (Writeable<ImageWrapper>)pipe02), "ImageSaver 01").start();
+		new Thread(() -> new ImageFileSource(DEFAULT_FILE_PATH, 100, pipe01), "ImageFileSource").start();
+		
+		System.out.println(":)");
 	}
 }
