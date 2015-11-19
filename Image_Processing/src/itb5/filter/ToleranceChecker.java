@@ -1,0 +1,73 @@
+package itb5.filter;
+
+import java.io.StreamCorruptedException;
+import java.security.InvalidParameterException;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import itb5.types.Coordinate;
+import pimpmypipe.filter.AbstractFilter;
+import pimpmypipe.interfaces.Readable;
+import pimpmypipe.interfaces.Writeable;
+
+public class ToleranceChecker extends AbstractFilter<LinkedList<Coordinate>, LinkedList<Boolean>> {
+	LinkedList<Coordinate> _expected;
+	int _tolerance;
+
+	public ToleranceChecker(LinkedList<Coordinate> expected, int tolerance, Readable<LinkedList<Coordinate>> input, Writeable<LinkedList<Boolean>> output)
+			throws InvalidParameterException {
+		super(input, output);
+		init(expected, tolerance);
+	}
+	
+	public ToleranceChecker(LinkedList<Coordinate> expected, int tolerance, Readable<LinkedList<Coordinate>> input)
+			throws InvalidParameterException {
+		super(input);
+		init(expected, tolerance);
+	}
+	
+	public ToleranceChecker(LinkedList<Coordinate> expected, int tolerance, Writeable<LinkedList<Boolean>> output)
+			throws InvalidParameterException {
+		super(output);
+		init(expected, tolerance);
+	}
+
+	private void init(LinkedList<Coordinate> expected, int tolerance) {
+		_expected = expected;
+		_tolerance = tolerance;
+	}
+	
+	@Override
+	public LinkedList<Boolean> read() throws StreamCorruptedException {
+		LinkedList<Boolean> results = new LinkedList<>();
+		
+		LinkedList<Coordinate> coordinates = this.readInput();
+		if(coordinates == null || coordinates.size() != _expected.size()) {
+			return null;
+		}
+		
+		Iterator<Coordinate> it1 = coordinates.iterator();
+		Iterator<Coordinate> it2 = _expected.iterator();
+		
+		while(it1.hasNext()) {
+			Coordinate c1 = it1.next();
+			Coordinate c2 = it2.next();
+			results.add(Math.abs(c1._x - c2._x) > _tolerance || Math.abs(c1._y - c2._y) > _tolerance);
+		}
+		
+		return results;
+	}
+
+	@Override
+	public void write(LinkedList<Coordinate> value) throws StreamCorruptedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
