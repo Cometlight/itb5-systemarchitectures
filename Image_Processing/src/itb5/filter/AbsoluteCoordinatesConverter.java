@@ -8,6 +8,10 @@ import pimpmypipe.filter.DataTransformationFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * Transforms relative coordinates (in the Region of Interest) to global
+ * coordinates (in the whole image).
+ */
 public class AbsoluteCoordinatesConverter extends DataTransformationFilter<LinkedList<Coordinate>> {
 
 	private Coordinate _upperLeft;

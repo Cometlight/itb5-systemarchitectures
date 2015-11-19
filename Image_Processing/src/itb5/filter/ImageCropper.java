@@ -11,6 +11,9 @@ import pimpmypipe.filter.DataTransformationFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * Crops the image to the specified region of interest.
+ */
 public class ImageCropper extends DataTransformationFilter<ImageWrapper> {
 	private Rectangle _rectangle;
 
