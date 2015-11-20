@@ -39,9 +39,19 @@ public class ToleranceChecker extends AbstractFilter<LinkedList<Coordinate>, Lin
 	
 	@Override
 	public LinkedList<Boolean> read() throws StreamCorruptedException {
+		LinkedList<Boolean> results = analyze(this.readInput());
+		return results;
+	}
+
+	@Override
+	public void write(LinkedList<Coordinate> coordinates) throws StreamCorruptedException {
+		LinkedList<Boolean> results = analyze(coordinates);
+		this.writeOutput(results);
+	}
+	
+	private LinkedList<Boolean> analyze(LinkedList<Coordinate> coordinates) {
 		LinkedList<Boolean> results = new LinkedList<>();
 		
-		LinkedList<Coordinate> coordinates = this.readInput();
 		if(coordinates == null || coordinates.size() != _expected.size()) {
 			return null;
 		}
@@ -52,22 +62,29 @@ public class ToleranceChecker extends AbstractFilter<LinkedList<Coordinate>, Lin
 		while(it1.hasNext()) {
 			Coordinate c1 = it1.next();
 			Coordinate c2 = it2.next();
-			results.add(Math.abs(c1._x - c2._x) > _tolerance || Math.abs(c1._y - c2._y) > _tolerance);
+			results.add(Math.abs(c1._x - c2._x) <= _tolerance && Math.abs(c1._y - c2._y) <= _tolerance);
 		}
 		
 		return results;
 	}
 
 	@Override
-	public void write(LinkedList<Coordinate> value) throws StreamCorruptedException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		LinkedList<Boolean> output = null;//getNewEntityObject();
+        try {
+            do {
+                output = read();
+
+                if (output != null) {
+                    writeOutput(output);
+                }
+            }while(output != null);
+            sendEndSignal();
+        } catch (StreamCorruptedException e) {
+            System.out.print("Thread reports error: ");
+            System.out.println(Thread.currentThread().getId() + " (" + Thread.currentThread().getName() + ")");
+            e.printStackTrace();
+        }
 	}
 
 }

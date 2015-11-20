@@ -18,6 +18,7 @@ import itb5.filter.ImageWrapperToPlanarImageConverter;
 import itb5.filter.MedianOperator;
 import itb5.filter.OpeningOperator;
 import itb5.filter.ThresholdOperator;
+import itb5.filter.ToleranceChecker;
 import itb5.types.Coordinate;
 import itb5.types.ImageWrapper;
 import pimpmypipe.interfaces.Readable;
@@ -32,6 +33,9 @@ public class ImageProcessing {
 	public static final int THRESHOLD_LOW = 0;
 	public static final int THRESHOLD_HIGH = 30;
 	public static final int THRESHOLD_MAP = 255;
+	public static final String EXPECTED_COORDINATES = "[(73,77), (110,80), (202,80), (265,79), (330,81), (396,81)]";
+	public static final int TOLERANCE = 10;
+	public static final String OUTPUT_FILE_NAME = "result.txt";
 	
 	public static void main(String[] args) throws StreamCorruptedException {
 		if(args.length < 2) {
@@ -41,6 +45,13 @@ public class ImageProcessing {
 		}
 		String mode = args[0].toLowerCase();
 		int nrOfTimes = Integer.valueOf(args[1]);
+		String inputFileName = args[2];
+		String outputFileName = args[3];
+		String expectedCoordinates = args[4];
+		int tolerance = Integer.valueOf(args[5]);
+		Coordinate upperLeft = CoordinateUtility.toCoordinate(args[6]);
+		Coordinate size = CoordinateUtility.toCoordinate(args[7]);
+		
 		if(nrOfTimes <= 0) {
 			System.out.println("Please provide a number > 0");
 		}
@@ -73,7 +84,8 @@ public class ImageProcessing {
 		ImageWrapperToPlanarImageConverter imgConverter = new ImageWrapperToPlanarImageConverter(imageSaver05);
 		CalcCentroidsFilter calcCentroidsFilter = new CalcCentroidsFilter(imgConverter);
 		AbsoluteCoordinatesConverter coordinateConverter = new AbsoluteCoordinatesConverter(new Coordinate(RECTANGLE.x, RECTANGLE.y), (Readable<LinkedList<Coordinate>>)calcCentroidsFilter);
-		AbstractSink<LinkedList<Coordinate>> sink = new AbstractSink<>(coordinateConverter);	// active sink
+		ToleranceChecker toleranceChecker = new ToleranceChecker(CoordinateUtility.toCoordinateList(EXPECTED_COORDINATES), TOLERANCE, coordinateConverter);
+		AbstractSink<LinkedList<Boolean>> sink = new AbstractSink<>(OUTPUT_FILE_NAME, toleranceChecker);	// active sink
 		
 		timer.stop();
 		System.out.println(timer.getTotalTimeInSeconds());
@@ -83,8 +95,9 @@ public class ImageProcessing {
 		Timer timer = new Timer();
 		timer.start();
 		
-		AbstractSink<LinkedList<Coordinate>> sink = new AbstractSink<>();	// passive sink
-		AbsoluteCoordinatesConverter coordinateConverter = new AbsoluteCoordinatesConverter(new Coordinate(RECTANGLE.x, RECTANGLE.y), (Writeable<LinkedList<Coordinate>>)sink);
+		AbstractSink<LinkedList<Boolean>> sink = new AbstractSink<>(OUTPUT_FILE_NAME);	// passive sink
+		ToleranceChecker toleranceChecker = new ToleranceChecker(CoordinateUtility.toCoordinateList(EXPECTED_COORDINATES), TOLERANCE, (Writeable<LinkedList<Boolean>>)sink);
+		AbsoluteCoordinatesConverter coordinateConverter = new AbsoluteCoordinatesConverter(new Coordinate(RECTANGLE.x, RECTANGLE.y), (Writeable<LinkedList<Coordinate>>)toleranceChecker);
 		CalcCentroidsFilter calcCentroidsFilter = new CalcCentroidsFilter(coordinateConverter);
 		ImageWrapperToPlanarImageConverter imgConverter = new ImageWrapperToPlanarImageConverter(calcCentroidsFilter);
 		ImageSaver imageSaver05 = new ImageSaver("step05", (Writeable<ImageWrapper>)imgConverter);
@@ -116,30 +129,32 @@ public class ImageProcessing {
 		SynchronizedPipe<PlanarImage> pipe11 = new SynchronizedPipe<>();
 		SynchronizedPipe<LinkedList<Coordinate>> pipe12 = new SynchronizedPipe<>();
 		SynchronizedPipe<LinkedList<Coordinate>> pipe13 = new SynchronizedPipe<>();
+		SynchronizedPipe<LinkedList<Boolean>> pipe14 = new SynchronizedPipe<>();
 		
 		Timer timer = new Timer();
 		timer.start();
 		new Thread(() -> {
 			try {
-				new AbstractSink<>(pipe13);
+				new AbstractSink<>(OUTPUT_FILE_NAME, pipe14);
 			} catch (Exception e) {
 				_log.log(Level.SEVERE, e.getMessage(), e);
 			}
 			timer.stop();
 			System.out.println(timer.getTotalTimeInSeconds());
 		}, "sink").start();
-		new Thread(new AbsoluteCoordinatesConverter(new Coordinate(RECTANGLE.x, RECTANGLE.y), pipe12, (Writeable<LinkedList<Coordinate>>)pipe13), "coordinate converter").start();
-		new Thread(new CalcCentroidsFilter((Readable<PlanarImage>)pipe11, (Writeable<LinkedList<Coordinate>>)pipe12), "calcCentroidsFilter").start();
+		new Thread(new ToleranceChecker(CoordinateUtility.toCoordinateList(EXPECTED_COORDINATES), TOLERANCE, pipe13, pipe14)).start();
+		new Thread(new AbsoluteCoordinatesConverter(new Coordinate(RECTANGLE.x, RECTANGLE.y), pipe12, pipe13), "coordinate converter").start();
+		new Thread(new CalcCentroidsFilter((Readable<PlanarImage>)pipe11, pipe12), "calcCentroidsFilter").start();
 		new Thread(new ImageWrapperToPlanarImageConverter(pipe10, pipe11), "imageWrapperToPlanarImageConverter").start();
-		new Thread(new ImageSaver("step05", pipe09, (Writeable<ImageWrapper>)pipe10), "ImageSaver 05").start();
-		new Thread(new OpeningOperator(JAIKernels.circle7, 2, pipe08, (Writeable<ImageWrapper>)pipe09), "OpeningOperator").start();
-		new Thread(new ImageSaver("step04", pipe07, (Writeable<ImageWrapper>)pipe08), "ImageSaver 04").start();
-		new Thread(new MedianOperator(pipe06, (Writeable<ImageWrapper>)pipe07), "MedianOperator").start();
-		new Thread(new ImageSaver("step03", pipe05, (Writeable<ImageWrapper>)pipe06), "ImageSaver 03").start();
-		new Thread(new ThresholdOperator(THRESHOLD_LOW, THRESHOLD_HIGH, THRESHOLD_MAP, pipe04, (Writeable<ImageWrapper>)pipe05), "ThresholdOperator").start();
-		new Thread(new ImageSaver("step02", pipe03, (Writeable<ImageWrapper>)pipe04), "ImageSaver 02").start();
-		new Thread(new ImageCropper(RECTANGLE, pipe02, (Writeable<ImageWrapper>)pipe03), "ImageCropper").start();
-		new Thread(new ImageSaver("step01", pipe01, (Writeable<ImageWrapper>)pipe02), "ImageSaver 01").start();
+		new Thread(new ImageSaver("step05", pipe09, pipe10), "ImageSaver 05").start();
+		new Thread(new OpeningOperator(JAIKernels.circle7, 2, pipe08, pipe09), "OpeningOperator").start();
+		new Thread(new ImageSaver("step04", pipe07, pipe08), "ImageSaver 04").start();
+		new Thread(new MedianOperator(pipe06, pipe07), "MedianOperator").start();
+		new Thread(new ImageSaver("step03", pipe05, pipe06), "ImageSaver 03").start();
+		new Thread(new ThresholdOperator(THRESHOLD_LOW, THRESHOLD_HIGH, THRESHOLD_MAP, pipe04, pipe05), "ThresholdOperator").start();
+		new Thread(new ImageSaver("step02", pipe03, pipe04), "ImageSaver 02").start();
+		new Thread(new ImageCropper(RECTANGLE, pipe02, pipe03), "ImageCropper").start();
+		new Thread(new ImageSaver("step01", pipe01, pipe02), "ImageSaver 01").start();
 		new Thread(() -> new ImageFileSource(DEFAULT_FILE_PATH, nrOfTimes, pipe01), "ImageFileSource").start();
 	}
 }
