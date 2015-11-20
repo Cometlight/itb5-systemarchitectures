@@ -1,0 +1,12 @@
+#Fri Nov 20 14:58:18 CET 2015
+threshold_map=255
+region_of_interest_upper_left=(40,40)
+expected_coordinates=[(73,77), (110,80), (202,80), (265,79), (330,81), (396,81)]
+input_file_name=loetstellen.jpg
+output_file_name=result.txt
+mode=multithreading
+threshold_low=0
+number_image_to_process=50
+tolerance=10
+threshold_high=30
+region_of_interest_width_height=(408,140)
