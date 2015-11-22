@@ -10,29 +10,37 @@ import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 /**
- * A sink that only prints out the received values.
+ * A sink that only prints the received values into a file.
  */
-public class AbstractSink<T> implements Writeable<T> {
-	private static final Logger _log = Logger.getLogger(AbstractSink.class.getName());
+public class FileSink<T> implements Writeable<T> {
+	private static final Logger _log = Logger.getLogger(FileSink.class.getName());
 
 	private FileWriter _fileWriter;
+	private Readable<T> _input;
 
-	public AbstractSink(String fileName) {
+	public FileSink(String fileName) {
 		initFileWriter(fileName);
 	}
 
-	public AbstractSink(String fileName, Readable<T> input) throws StreamCorruptedException {
+	public FileSink(String fileName, Readable<T> input) throws StreamCorruptedException {
 		this(fileName);
-		
-		try {
-			T entity;
-			while ((entity = input.read()) != null) {
-				_fileWriter.write(entity.toString() + System.lineSeparator());
+		_input = input;
+	}
+	
+	// Note: This method wasn't named "run" to avoid confusion with the Runnable interface.
+	// This method may only be used if a Readable<> has been provided in the constructor.
+	public void readAll() {
+		if(_input != null) {
+			try {
+				T entity;
+				while ((entity = _input.read()) != null) {
+					_fileWriter.write(entity.toString() + System.lineSeparator());
+				}
+				_fileWriter.flush();
+				_fileWriter.close();
+			} catch (IOException e) {
+				_log.log(Level.SEVERE, e.getMessage(), e);
 			}
-			_fileWriter.flush();
-			_fileWriter.close();
-		} catch (IOException e) {
-			_log.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 

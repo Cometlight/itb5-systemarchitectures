@@ -6,6 +6,10 @@ import java.util.regex.Pattern;
 
 import itb5.types.Coordinate;
 
+/**
+ * Provides simple conversion methods between Strings and {@link #itb5.types.Coordinate}s.
+ * This comes in handy when, for example, working with property files.
+ */
 public class CoordinateUtility {
 	private final static String coordinateRegex = "\\((-?\\d+),(-?\\d+)\\)";
 	private final static String coordinateRegexSimple = "\\(-?\\d+,-?\\d+\\)";

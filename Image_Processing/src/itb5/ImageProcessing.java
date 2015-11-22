@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import javax.media.jai.PlanarImage;
 
 import itb5.filter.AbsoluteCoordinatesConverter;
-import itb5.filter.AbstractSink;
+import itb5.filter.FileSink;
 import itb5.filter.CalcCentroidsFilter;
 import itb5.filter.ImageCropper;
 import itb5.filter.ImageFileSource;
@@ -56,9 +56,6 @@ public class ImageProcessing {
 	}
 
 	private static void pull(Settings settings) throws StreamCorruptedException {
-		Timer timer = new Timer();
-		timer.start();
-
 		ImageFileSource imageFileSource = new ImageFileSource(settings.getInputFileName(), settings.getNumberImageToProcess()); // passive source
 		ImageSaver imageSaver01 = new ImageSaver("step01", imageFileSource);
 		ImageCropper imageCropper = new ImageCropper(settings.getRegionOfInterest(), (Readable<ImageWrapper>) imageSaver01);
@@ -76,17 +73,19 @@ public class ImageProcessing {
 		AbsoluteCoordinatesConverter coordinateConverter = new AbsoluteCoordinatesConverter(
 				new Coordinate(settings.getRegionOfInterest().x, settings.getRegionOfInterest().y), (Readable<LinkedList<Coordinate>>) calcCentroidsFilter);
 		ToleranceChecker toleranceChecker = new ToleranceChecker(settings.getExpectedCoordinates(), settings.getTolerance(), coordinateConverter);
-		AbstractSink<LinkedList<Boolean>> sink = new AbstractSink<>(settings.getOutputFileName(), toleranceChecker); // active sink
+		FileSink<LinkedList<Boolean>> sink = new FileSink<>(settings.getOutputFileName(), toleranceChecker); // active sink
+		
+		Timer timer = new Timer();
+		timer.start();
+		
+		sink.readAll();
 
 		timer.stop();
 		System.out.println(timer.getTotalTimeInSeconds());
 	}
 
 	private static void push(Settings settings) throws StreamCorruptedException {
-		Timer timer = new Timer();
-		timer.start();
-
-		AbstractSink<LinkedList<Boolean>> sink = new AbstractSink<>(settings._outputFileName); // passive sink
+		FileSink<LinkedList<Boolean>> sink = new FileSink<>(settings._outputFileName); // passive sink
 		ToleranceChecker toleranceChecker = new ToleranceChecker(settings.getExpectedCoordinates(), settings.getTolerance(), (Writeable<LinkedList<Boolean>>) sink);
 		AbsoluteCoordinatesConverter coordinateConverter = new AbsoluteCoordinatesConverter(
 				new Coordinate(settings.getRegionOfInterest().x, settings.getRegionOfInterest().y), (Writeable<LinkedList<Coordinate>>) toleranceChecker);
@@ -104,6 +103,11 @@ public class ImageProcessing {
 		ImageCropper imageCropper = new ImageCropper(settings.getRegionOfInterest(), (Writeable<ImageWrapper>) imageSaver02);
 		ImageSaver imageSaver01 = new ImageSaver("step01", (Writeable<ImageWrapper>) imageCropper);
 		ImageFileSource imageFileSource = new ImageFileSource(settings.getInputFileName(), settings.getNumberImageToProcess(), imageSaver01); // active source
+		
+		Timer timer = new Timer();
+		timer.start();
+		
+		imageFileSource.writeAll();
 
 		timer.stop();
 		System.out.println(timer.getTotalTimeInSeconds());
@@ -129,7 +133,7 @@ public class ImageProcessing {
 		timer.start();
 		new Thread(() -> {
 			try {
-				new AbstractSink<>(settings.getOutputFileName(), pipe14);
+				new FileSink<>(settings.getOutputFileName(), pipe14).readAll();;
 			} catch (Exception e) {
 				_log.log(Level.SEVERE, e.getMessage(), e);
 			}
@@ -152,7 +156,7 @@ public class ImageProcessing {
 		new Thread(new ImageSaver("step02", pipe03, pipe04), "ImageSaver 02").start();
 		new Thread(new ImageCropper(settings.getRegionOfInterest(), pipe02, pipe03), "ImageCropper").start();
 		new Thread(new ImageSaver("step01", pipe01, pipe02), "ImageSaver 01").start();
-		new Thread(() -> new ImageFileSource(settings.getInputFileName(), settings.getNumberImageToProcess(), pipe01), "ImageFileSource").start();
+		new Thread(() -> new ImageFileSource(settings.getInputFileName(), settings.getNumberImageToProcess(), pipe01).writeAll(), "ImageFileSource").start();
 	}
 
 	private static Settings loadSettingsFromPropertyFile(String filePath) {

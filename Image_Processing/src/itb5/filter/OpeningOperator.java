@@ -13,8 +13,7 @@ import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 /**
- * First: Erode
- * Second: Dilate
+ * Performs erode, then dilate. Both times using the same kernel.
  */
 public class OpeningOperator  extends DataTransformationFilter<ImageWrapper> {
 	private KernelJAI _kernel;

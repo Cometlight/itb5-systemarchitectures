@@ -10,9 +10,15 @@ import pimpmypipe.filter.AbstractFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * This ToleranceChecker is used to verify that some coordinates are as expected, within a given tolerance.
+ * The tolerance indicates how far away the actual coordinate may be from the expected coordinate, both on the x-axis and the y-axis.
+ * If a coordinate is in the permitted area, true is written into the returned list; otherwise false.
+ * If the number of actual coordinates is not equal to the number of expected coordinates, false is returned for each coordinate.
+ */
 public class ToleranceChecker extends AbstractFilter<LinkedList<Coordinate>, LinkedList<Boolean>> {
-	LinkedList<Coordinate> _expected;
-	int _tolerance;
+	private LinkedList<Coordinate> _expected;
+	private int _tolerance;
 
 	public ToleranceChecker(LinkedList<Coordinate> expected, int tolerance, Readable<LinkedList<Coordinate>> input, Writeable<LinkedList<Boolean>> output)
 			throws InvalidParameterException {

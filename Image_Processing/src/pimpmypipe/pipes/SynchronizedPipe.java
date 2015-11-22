@@ -10,6 +10,12 @@ import java.util.logging.Logger;
 
 import pimpmypipe.interfaces.IOable;
 
+/**
+ * This pipe can be used when working with multiple threads, connecting two filters that run in distinct threads.
+ * Synchronization is ensured.
+ * 
+ * @param <T> the type to be handled by this pipe
+ */
 public class SynchronizedPipe<T> implements IOable<T, T> {
 	private static final Logger _log = Logger.getLogger(SynchronizedPipe.class.getName());
 	

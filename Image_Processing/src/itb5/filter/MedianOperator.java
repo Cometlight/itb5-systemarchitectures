@@ -11,6 +11,9 @@ import pimpmypipe.filter.DataTransformationFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * Performs the median filter processing, using the standard {@link javax.media.jai.operator.MedianFilterDescriptor#MEDIAN_MASK_SQUARE}.
+ */
 public class MedianOperator extends DataTransformationFilter<ImageWrapper> {
 
 	public MedianOperator(Readable<ImageWrapper> input, Writeable<ImageWrapper> output)

@@ -11,8 +11,8 @@ import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 /**
- * Reads the specified image from the file system and makes it available n 
- * times.
+ * Reads the specified image from the file system and makes it available {@link #_timesToRead} times.
+ * If {@link #ImageFileSource(String, int, Writeable)} has been used for creation, {@link #writeAll()} may be used to start the filter.
  */
 public class ImageFileSource implements Readable<ImageWrapper> {
 	private static final Logger _log = Logger.getLogger(ImageFileSource.class.getName());
@@ -31,19 +31,22 @@ public class ImageFileSource implements Readable<ImageWrapper> {
 	public ImageFileSource(String filePath, int timesToRead, Writeable<ImageWrapper> out) {
 		this(filePath, timesToRead);
 		_out = out;
-		writeAll();
 	}
 
-	private void writeAll() {
-		try {
-			while (_timesToRead-- > 0) {
-				// return a clone of the image!
-				_out.write(_imageRead.clone());
+	// Note: This method wasn't named "run" to avoid confusion with the Runnable interface.
+	// This method may only be used if a Writeable<> has been provided in the constructor.
+	public void writeAll() {
+		if(_out != null) {
+			try {
+				while (_timesToRead-- > 0) {
+					// return a clone of the image!
+					_out.write(_imageRead.clone());
+				}
+				_out.write(null);
+			} catch (StreamCorruptedException e) {
+				_log.log(Level.SEVERE, e.getMessage(), e);
+				return;
 			}
-			_out.write(null);
-		} catch (StreamCorruptedException e) {
-			_log.log(Level.SEVERE, e.getMessage(), e);
-			return;
 		}
 	}
 

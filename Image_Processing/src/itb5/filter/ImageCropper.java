@@ -12,7 +12,7 @@ import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
 /**
- * Crops the image to the specified region of interest.
+ * Crops the image to the specified region of interest ({@link #_rectangle}).
  */
 public class ImageCropper extends DataTransformationFilter<ImageWrapper> {
 	private Rectangle _rectangle;
@@ -38,7 +38,5 @@ public class ImageCropper extends DataTransformationFilter<ImageWrapper> {
 		image = PlanarImage.wrapRenderedImage((RenderedImage)image.getAsBufferedImage(_rectangle, image.getColorModel()));
 		entity.setImage(image);
 	}
-	
-	
 
 }

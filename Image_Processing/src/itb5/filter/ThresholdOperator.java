@@ -10,6 +10,9 @@ import pimpmypipe.filter.DataTransformationFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * All pixels whose brightness is between {@link #_low} and {@link #_high} are changed to the color specified in {@link #_map}.
+ */
 public class ThresholdOperator extends DataTransformationFilter<ImageWrapper> {
 	private double[] _low;
 	private double[] _high;

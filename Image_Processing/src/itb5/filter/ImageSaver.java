@@ -9,6 +9,9 @@ import pimpmypipe.filter.DataTransformationFilter;
 import pimpmypipe.interfaces.Readable;
 import pimpmypipe.interfaces.Writeable;
 
+/**
+ * Saves the image without any modification to the hard drive.
+ */
 public class ImageSaver extends DataTransformationFilter<ImageWrapper> {
 	String _filePath;	// without file extension
 
