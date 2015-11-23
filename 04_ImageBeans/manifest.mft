@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+
+Name: beans/imageFileLoader/ImageFileLoader.class
+Java-Bean: True
+
+Name: beans/imageVisualizer/ImageVisualizer.class
+Java-Bean: True
+
