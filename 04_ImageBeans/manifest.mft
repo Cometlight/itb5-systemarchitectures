@@ -6,3 +6,5 @@ Java-Bean: True
 Name: beans/imageVisualizer/ImageVisualizer.class
 Java-Bean: True
 
+Name: beans/ThresholdOperator.class
+Java-Bean: True
