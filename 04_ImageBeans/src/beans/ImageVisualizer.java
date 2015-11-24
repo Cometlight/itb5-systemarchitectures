@@ -1,6 +1,7 @@
-package beans.imageVisualizer;
+package beans;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
@@ -10,8 +11,17 @@ import itb5.types.ImageWrapper;
 
 public class ImageVisualizer extends Canvas implements ImageListener {
 	private static final long serialVersionUID = 1L;
-	private LinkedList<ImageListener> listeners = new LinkedList<>();
+
+	private LinkedList<ImageListener> listeners;
 	private ImageWrapper imageWrapper;
+
+	public ImageVisualizer() {
+		super();
+		listeners = new LinkedList<>();
+		imageWrapper = null;
+		setSize(100, 100);
+		setBackground(Color.GRAY);
+	}
 
 	@Override
 	public void imageValueChanged(ImageEvent event) {
@@ -19,17 +29,17 @@ public class ImageVisualizer extends Canvas implements ImageListener {
 		repaint();
 		notifyImageListener(event);
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-		if(imageWrapper != null) {
+		if (imageWrapper != null) {
 			System.out.println("ImageVisualizer: " + imageWrapper + " and " + imageWrapper.getImage());
 			g.drawImage(imageWrapper.getImage().getAsBufferedImage(), 0, 0, this);
 		} else {
 			System.out.println("ImageVisualizer: it's null :C");
 		}
 	}
-	
+
 	public void addImageListener(ImageListener listener) {
 		if (listener != null) {
 			listeners.add(listener);

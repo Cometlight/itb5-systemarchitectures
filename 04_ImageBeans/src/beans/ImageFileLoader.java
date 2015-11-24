@@ -1,4 +1,4 @@
-package beans.imageFileLoader;
+package beans;
 
 import java.io.File;
 import java.io.Serializable;

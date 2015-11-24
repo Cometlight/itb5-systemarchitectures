@@ -1,9 +1,33 @@
 Manifest-Version: 1.0
 
-Name: beans/imageFileLoader/ImageFileLoader.class
+Name: beans/ClosingOperator.class
 Java-Bean: True
 
-Name: beans/imageVisualizer/ImageVisualizer.class
+Name: beans/DilateOperator.class
+Java-Bean: True
+
+Name: beans/ErodeOperator.class
+Java-Bean: True
+
+Name: beans/ImageCropper.class
+Java-Bean: True
+
+Name: beans/ImageFileLoader.class
+Java-Bean: True
+
+Name: beans/ImageFileSaver.class
+Java-Bean: True
+
+Name: beans/ImageVisualizer.class
+Java-Bean: True
+
+Name: beans/MedianOperator.class
+Java-Bean: True
+
+Name: beans/OpeningOperator.class
+Java-Bean: True
+
+Name: beans/OverlayOperator.class
 Java-Bean: True
 
 Name: beans/ThresholdOperator.class
