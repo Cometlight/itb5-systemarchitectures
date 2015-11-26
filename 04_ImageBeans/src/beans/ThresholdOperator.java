@@ -22,7 +22,7 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 	private double low;
 	private double high;
 	private double map;
-	private ImageWrapper imageWrapper;
+	private ImageWrapper image;
 
 	private PropertyChangeSupport pcs;
 
@@ -30,7 +30,7 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 		low = 0.0;
 		high = 0.0;
 		map = 255.0;
-		imageWrapper = null;
+		image = null;
 		pcs = new PropertyChangeSupport(this);
 	}
 
@@ -43,6 +43,7 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 			double oldLow = low;
 			low = newLow;
 			pcs.firePropertyChange("low", oldLow, newLow);
+			System.out.println("Threshold: new low: " + low);
 			process();
 		}
 	}
@@ -56,6 +57,7 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 			double oldHigh = high;
 			high = newHigh;
 			pcs.firePropertyChange("high", oldHigh, newHigh);
+			System.out.println("Threshold: new high: " + high);
 			process();
 		}
 	}
@@ -69,42 +71,46 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 			double oldMap = map;
 			map = newMap;
 			pcs.firePropertyChange("map", oldMap, newMap);
+			System.out.println("Threshold: new map: " + map);
 			process();
 		}
 	}
 
-	public ImageWrapper getImageWrapper() {
-		return imageWrapper;
+	public ImageWrapper getImage() {
+		return image;
 	}
 
-	public void setImageWrapper(ImageWrapper newImageWrapper) {
+	public void setImage(ImageWrapper newImageWrapper) {
+		System.out.println("Threshold: setImage: " + newImageWrapper);
 		if (newImageWrapper != null) {
-			imageWrapper = newImageWrapper.clone();
+			image = newImageWrapper;
 		} else {
-			imageWrapper = null;
+			image = null;
 		}
 		process();
 	}
 
 	private void process() {
-		if (imageWrapper != null) {
+		System.out.println("Threshold: processing...: " + image);
+		if (image != null) {
 			new itb5.filter.ThresholdOperator(low, high, map, new Readable<ImageWrapper>() {
 				@Override
 				public ImageWrapper read() throws StreamCorruptedException {
-					return imageWrapper;
+					return image;
 				}
 			}, new Writeable<ImageWrapper>() {
 				@Override
 				public void write(ImageWrapper value) throws StreamCorruptedException {
-					imageWrapper = value;
-					pcs.firePropertyChange("image", null, imageWrapper);
+					image = value;
+					System.out.println("Threshold: new image: " + value);
+					pcs.firePropertyChange("image", null, image);
 				}
 			});
 		}
 	}
 
 	public void propertyChange(PropertyChangeEvent pce) {
-		// TODO ...
+		System.out.println(pce.getPropertyName() + ": " + pce.getOldValue() + " --> " + pce.getNewValue());
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {

@@ -3,61 +3,62 @@ package beans;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.LinkedList;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-import beans.events.ImageEvent;
-import beans.events.ImageListener;
 import itb5.types.ImageWrapper;
 
-public class ImageVisualizer extends Canvas implements ImageListener {
+public class ImageVisualizer extends Canvas implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 
-	private LinkedList<ImageListener> listeners;
-	private ImageWrapper imageWrapper;
+	private ImageWrapper image;
+	private PropertyChangeSupport pcs;
 
 	public ImageVisualizer() {
 		super();
-		listeners = new LinkedList<>();
-		imageWrapper = null;
+		image = null;
+		pcs = new PropertyChangeSupport(this);
 		setSize(100, 100);
 		setBackground(Color.GRAY);
 	}
 
 	@Override
-	public void imageValueChanged(ImageEvent event) {
-		this.imageWrapper = event.getValue();
-		repaint();
-		notifyImageListener(event);
-	}
-
-	@Override
 	public void paint(Graphics g) {
-		if (imageWrapper != null) {
-			System.out.println("ImageVisualizer: " + imageWrapper + " and " + imageWrapper.getImage());
-			g.drawImage(imageWrapper.getImage().getAsBufferedImage(), 0, 0, this);
+		if (image != null) {
+			System.out.println("ImageVisualizer: " + image + " and " + image.getImage());
+			g.drawImage(image.getImage().getAsBufferedImage(), 0, 0, this);
 		} else {
 			System.out.println("ImageVisualizer: it's null :C");
 		}
 	}
 
-	public void addImageListener(ImageListener listener) {
-		if (listener != null) {
-			listeners.add(listener);
+	public ImageWrapper getImage() {
+		return image;
+	}
+
+	public void setImage(ImageWrapper newImageWrapper) {
+		if (newImageWrapper != image) {
+			ImageWrapper oldImageWrapper = image;
+			this.image = newImageWrapper;
+			repaint();
+			pcs.firePropertyChange("image", oldImageWrapper, newImageWrapper);
 		}
 	}
 
-	public void removeImageListener(ImageListener listener) {
-		listeners.remove(listener);
+	@Override
+	public void propertyChange(PropertyChangeEvent pce) {
+		System.out.println(pce.getPropertyName() + ": " + pce.getOldValue() + " --> " + pce.getNewValue());
+		if (pce.getPropertyName().equals("image")) {
+			setImage((ImageWrapper) pce.getNewValue());
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void notifyImageListener(ImageEvent event) {
-		LinkedList<ImageListener> listenersCopy;
+	public void addPropertyChangeListener(PropertyChangeListener pcl) {
+		pcs.addPropertyChangeListener(pcl);
+	}
 
-		synchronized (this) {
-			listenersCopy = (LinkedList<ImageListener>) listeners.clone();
-		}
-
-		listenersCopy.forEach(listener -> listener.imageValueChanged(event));
+	public void removePropertyChangeListener(PropertyChangeListener pcl) {
+		pcs.removePropertyChangeListener(pcl);
 	}
 }

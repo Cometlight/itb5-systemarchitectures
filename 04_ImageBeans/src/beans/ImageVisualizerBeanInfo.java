@@ -6,6 +6,11 @@ import java.beans.SimpleBeanInfo;
 public class ImageVisualizerBeanInfo extends SimpleBeanInfo {
 	@Override
 	public PropertyDescriptor[] getPropertyDescriptors() {
-		return new PropertyDescriptor[] {};
+		try {
+			PropertyDescriptor image = new PropertyDescriptor("Image", ImageVisualizer.class, "getImage", "setImage");
+			return new PropertyDescriptor[] { image };
+		} catch (Exception e) {
+			return super.getPropertyDescriptors();
+		}
 	}
 }

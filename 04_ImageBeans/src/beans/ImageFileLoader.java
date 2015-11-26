@@ -1,66 +1,72 @@
 package beans;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.Serializable;
 import java.io.StreamCorruptedException;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import beans.events.ImageEvent;
-import beans.events.ImageListener;
 import itb5.filter.ImageFileSource;
 import itb5.types.ImageWrapper;
 
+/**
+ * Loads an image from the file system.
+ */
 public class ImageFileLoader implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(ImageFileLoader.class.getName());
 
-	private String fileName;
-	private LinkedList<ImageListener> listeners;
+	private String filename;
+	private ImageWrapper image;
+	private PropertyChangeSupport pcs;
 
 	public ImageFileLoader() {
-		fileName = "";
-		listeners = new LinkedList<>();
+		filename = "";
+		image = null;
+		pcs = new PropertyChangeSupport(this);
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getFilename() {
+		return filename;
 	}
 
-	public void setFileName(String fileName) {
-		// TODO: verify if loadable by JAI
-		if (new File(fileName).exists()) {
-			this.fileName = fileName;
+	public void setFilename(String newFilename) {
+		if (new File(newFilename).exists()) {
+			String oldFilename = filename;
+			filename = newFilename;
 			try {
-				ImageWrapper imgWrp = new ImageFileSource(fileName, 1).read();
-				System.out.println("ImageFileLoader: " + imgWrp);
-				notifyImageListener(imgWrp);
+				log.info("ImageFileLoader: Trying to make an image...");
+				ImageWrapper imgWrapper = new ImageFileSource(newFilename, 1).read();
+				log.info("ImageFileLoader: ImageWrapper = " + imgWrapper);
+				pcs.firePropertyChange("filename", oldFilename, newFilename);
+				this.setImage(imgWrapper);
 			} catch (StreamCorruptedException e) {
 				log.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
 	}
-
-	public void addImageListener(ImageListener listener) {
-		if (listener != null) {
-			listeners.add(listener);
+	
+	public void setImage(ImageWrapper newImageWrapper) {
+		log.info("ImageFileLoader: setImage: " + newImageWrapper);
+		if (newImageWrapper != image) {
+			ImageWrapper oldImageWrapper = image;
+			image = newImageWrapper;
+			log.info("ImageFileLoader: setImage: firePropertyChange");
+			pcs.firePropertyChange("image", oldImageWrapper, newImageWrapper);
 		}
 	}
-
-	public void removeImageListener(ImageListener listener) {
-		listeners.remove(listener);
+	
+	public ImageWrapper getImgae() {
+		return image == null ? null : image.clone();
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener pcl) {
+		pcs.addPropertyChangeListener(pcl);
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void notifyImageListener(ImageWrapper value) {
-		LinkedList<ImageListener> listenersCopy;
-		ImageEvent event = new ImageEvent(this, value);
-
-		synchronized (this) {
-			listenersCopy = (LinkedList<ImageListener>) listeners.clone();
-		}
-
-		listenersCopy.forEach(listener -> listener.imageValueChanged(event));
+	public void removePropertyChangeListener(PropertyChangeListener pcl) {
+		pcs.removePropertyChangeListener(pcl);
 	}
 }
