@@ -7,10 +7,10 @@ public class ThresholdOperatorBeanInfo extends SimpleBeanInfo {
 	@Override
 	public PropertyDescriptor[] getPropertyDescriptors() {
 		try {
-			PropertyDescriptor low = new PropertyDescriptor("Low Value", ThresholdOperator.class, "getLow", "setLow");
-			PropertyDescriptor high = new PropertyDescriptor("High Value", ThresholdOperator.class, "getHigh", "setHigh");
-			PropertyDescriptor map = new PropertyDescriptor("Map Value", ThresholdOperator.class, "getMap", "setMap");
-			PropertyDescriptor image = new PropertyDescriptor("Image", ThresholdOperator.class, "getImage", "setImage");
+			PropertyDescriptor low = new PropertyDescriptor("low", ThresholdOperator.class);
+			PropertyDescriptor high = new PropertyDescriptor("high", ThresholdOperator.class);
+			PropertyDescriptor map = new PropertyDescriptor("map", ThresholdOperator.class);
+			PropertyDescriptor image = new PropertyDescriptor("image", ThresholdOperator.class);
 			return new PropertyDescriptor[] { low, high, map, image };
 		} catch (Exception e) {
 			return super.getPropertyDescriptors();

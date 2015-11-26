@@ -3,13 +3,12 @@ package beans;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import itb5.types.ImageWrapper;
 
-public class ImageVisualizer extends Canvas implements PropertyChangeListener {
+public class ImageVisualizer extends Canvas {
 	private static final long serialVersionUID = 1L;
 
 	private ImageWrapper image;
@@ -26,10 +25,7 @@ public class ImageVisualizer extends Canvas implements PropertyChangeListener {
 	@Override
 	public void paint(Graphics g) {
 		if (image != null) {
-			System.out.println("ImageVisualizer: " + image + " and " + image.getImage());
 			g.drawImage(image.getImage().getAsBufferedImage(), 0, 0, this);
-		} else {
-			System.out.println("ImageVisualizer: it's null :C");
 		}
 	}
 
@@ -38,19 +34,11 @@ public class ImageVisualizer extends Canvas implements PropertyChangeListener {
 	}
 
 	public void setImage(ImageWrapper newImageWrapper) {
-		if (newImageWrapper != image) {
+		if (newImageWrapper != null && !newImageWrapper.equals(image)) {
 			ImageWrapper oldImageWrapper = image;
-			this.image = newImageWrapper;
+			this.image = newImageWrapper.clone();
 			repaint();
 			pcs.firePropertyChange("image", oldImageWrapper, newImageWrapper);
-		}
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent pce) {
-		System.out.println(pce.getPropertyName() + ": " + pce.getOldValue() + " --> " + pce.getNewValue());
-		if (pce.getPropertyName().equals("image")) {
-			setImage((ImageWrapper) pce.getNewValue());
 		}
 	}
 

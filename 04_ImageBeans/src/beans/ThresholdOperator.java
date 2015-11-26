@@ -1,14 +1,11 @@
 package beans;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.Serializable;
 import java.io.StreamCorruptedException;
+import java.security.InvalidParameterException;
+import java.util.logging.Level;
 
 import itb5.types.ImageWrapper;
-import pimpmypipe.interfaces.Readable;
-import pimpmypipe.interfaces.Writeable;
 
 /**
  * All pixels whose brightness is between {@link #low} and {@link #high} are
@@ -16,15 +13,14 @@ import pimpmypipe.interfaces.Writeable;
  * 
  * TODO: bind image and update image on property change
  */
-public class ThresholdOperator implements Serializable, PropertyChangeListener {
+public class ThresholdOperator extends PropertySupportBean {
 	private static final long serialVersionUID = 1L;
 
 	private double low;
 	private double high;
 	private double map;
 	private ImageWrapper image;
-
-	private PropertyChangeSupport pcs;
+	private ImageWrapper originalImage;
 
 	public ThresholdOperator() {
 		low = 0.0;
@@ -43,7 +39,6 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 			double oldLow = low;
 			low = newLow;
 			pcs.firePropertyChange("low", oldLow, newLow);
-			System.out.println("Threshold: new low: " + low);
 			process();
 		}
 	}
@@ -57,7 +52,6 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 			double oldHigh = high;
 			high = newHigh;
 			pcs.firePropertyChange("high", oldHigh, newHigh);
-			System.out.println("Threshold: new high: " + high);
 			process();
 		}
 	}
@@ -71,7 +65,6 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 			double oldMap = map;
 			map = newMap;
 			pcs.firePropertyChange("map", oldMap, newMap);
-			System.out.println("Threshold: new map: " + map);
 			process();
 		}
 	}
@@ -81,43 +74,24 @@ public class ThresholdOperator implements Serializable, PropertyChangeListener {
 	}
 
 	public void setImage(ImageWrapper newImageWrapper) {
-		System.out.println("Threshold: setImage: " + newImageWrapper);
-		if (newImageWrapper != null) {
-			image = newImageWrapper;
-		} else {
-			image = null;
-		}
+		originalImage = newImageWrapper != null ? newImageWrapper.clone() : null;
+		
 		process();
 	}
 
 	private void process() {
-		System.out.println("Threshold: processing...: " + image);
-		if (image != null) {
-			new itb5.filter.ThresholdOperator(low, high, map, new Readable<ImageWrapper>() {
-				@Override
-				public ImageWrapper read() throws StreamCorruptedException {
-					return image;
+		if (originalImage != null) {
+			try {
+				ImageWrapper oldImage = image;
+				ImageWrapper newImage = new itb5.filter.ThresholdOperator(low, high, map, () -> originalImage.clone()).read();
+				if (newImage != null) {
+					image = newImage.clone();
 				}
-			}, new Writeable<ImageWrapper>() {
-				@Override
-				public void write(ImageWrapper value) throws StreamCorruptedException {
-					image = value;
-					System.out.println("Threshold: new image: " + value);
-					pcs.firePropertyChange("image", null, image);
-				}
-			});
+				pcs.firePropertyChange("image", oldImage, newImage);
+			} catch (StreamCorruptedException | InvalidParameterException e) {
+				log.log(Level.SEVERE, e.getMessage(), e);
+			}
 		}
 	}
 
-	public void propertyChange(PropertyChangeEvent pce) {
-		System.out.println(pce.getPropertyName() + ": " + pce.getOldValue() + " --> " + pce.getNewValue());
-	}
-
-	public void addPropertyChangeListener(PropertyChangeListener pcl) {
-		pcs.addPropertyChangeListener(pcl);
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener pcl) {
-		pcs.removePropertyChangeListener(pcl);
-	}
 }

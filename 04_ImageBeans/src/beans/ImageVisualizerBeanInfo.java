@@ -7,7 +7,7 @@ public class ImageVisualizerBeanInfo extends SimpleBeanInfo {
 	@Override
 	public PropertyDescriptor[] getPropertyDescriptors() {
 		try {
-			PropertyDescriptor image = new PropertyDescriptor("Image", ImageVisualizer.class, "getImage", "setImage");
+			PropertyDescriptor image = new PropertyDescriptor("image", ImageVisualizer.class);
 			return new PropertyDescriptor[] { image };
 		} catch (Exception e) {
 			return super.getPropertyDescriptors();

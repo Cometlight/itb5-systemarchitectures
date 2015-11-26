@@ -1,7 +1,6 @@
 package itb5.types;
 
 import javax.media.jai.PlanarImage;
-import javax.media.jai.RenderedOp;
 
 /**
  * Wraps a {@link #javax.media.jai.PlanarImage}. This is useful when working
@@ -24,7 +23,31 @@ public class ImageWrapper implements Cloneable {
 
 	@Override
 	public ImageWrapper clone() {
-		//RenderedOp op = _image.getAsBufferedImage().
-		return this; //new ImageWrapper(.createInstance());
+		return new ImageWrapper(_image);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((_image == null) ? 0 : _image.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImageWrapper other = (ImageWrapper) obj;
+		if (_image == null) {
+			if (other._image != null)
+				return false;
+		} else if (!_image.equals(other._image))
+			return false;
+		return true;
 	}
 }
