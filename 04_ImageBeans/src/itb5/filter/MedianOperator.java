@@ -15,20 +15,24 @@ import pimpmypipe.interfaces.Writeable;
  * Performs the median filter processing, using the standard {@link javax.media.jai.operator.MedianFilterDescriptor#MEDIAN_MASK_SQUARE}.
  */
 public class MedianOperator extends DataTransformationFilter<ImageWrapper> {
+	private int _nrOfProcessingSteps;
 
-	public MedianOperator(Readable<ImageWrapper> input, Writeable<ImageWrapper> output)
+	public MedianOperator(int nrOfProcessingSteps, Readable<ImageWrapper> input, Writeable<ImageWrapper> output)
 			throws InvalidParameterException {
 		super(input, output);
+		_nrOfProcessingSteps = nrOfProcessingSteps;
 	}
 	
-	public MedianOperator(Readable<ImageWrapper> input)
+	public MedianOperator(int nrOfProcessingSteps, Readable<ImageWrapper> input)
 			throws InvalidParameterException {
 		super(input);
+		_nrOfProcessingSteps = nrOfProcessingSteps;
 	}
 	
-	public MedianOperator(Writeable<ImageWrapper> output)
+	public MedianOperator(int nrOfProcessingSteps, Writeable<ImageWrapper> output)
 			throws InvalidParameterException {
 		super(output);
+		_nrOfProcessingSteps = nrOfProcessingSteps;
 	}
 
 	@Override
@@ -36,7 +40,7 @@ public class MedianOperator extends DataTransformationFilter<ImageWrapper> {
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(entity.getImage());
 		pb.add(MedianFilterDescriptor.MEDIAN_MASK_SQUARE);
-		pb.add(3);
+		pb.add(_nrOfProcessingSteps);
 		entity.setImage(JAI.create("MedianFilter", pb));
 	}
 
