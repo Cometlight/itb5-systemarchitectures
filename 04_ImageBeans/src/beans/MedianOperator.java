@@ -6,6 +6,10 @@ import java.util.logging.Level;
 
 import itb5.types.ImageWrapper;
 
+/**
+ * Performs the median filter processing, using the standard
+ * {@link javax.media.jai.operator.MedianFilterDescriptor#MEDIAN_MASK_SQUARE}.
+ */
 public class MedianOperator extends PropertySupportBean {
 	private static final long serialVersionUID = 1L;
 
