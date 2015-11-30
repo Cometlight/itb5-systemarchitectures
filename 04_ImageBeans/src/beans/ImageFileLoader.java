@@ -22,10 +22,18 @@ public class ImageFileLoader extends PropertySupportBean {
 		pcs = new PropertyChangeSupport(this);
 	}
 
+	/**
+	 * Gets the filename of the current image.
+	 * @return the filename of the current image
+	 */
 	public String getFilename() {
 		return filename;
 	}
 
+	/**
+	 * Loads the image (if possible) and fires a property-change event.
+	 * @param newFilename the filename of the new image
+	 */
 	public void setFilename(String newFilename) {
 		if (newFilename != null && new File(newFilename).exists()) {
 			String oldFilename = filename;
@@ -52,6 +60,10 @@ public class ImageFileLoader extends PropertySupportBean {
 		}
 	}
 	
+	/**
+	 * Gets the current image.
+	 * @return the current image if there is one; null, otherwise
+	 */
 	public ImageWrapper getImage() {
 		return image == null ? null : image.clone();
 	}

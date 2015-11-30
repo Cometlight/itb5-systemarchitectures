@@ -11,6 +11,10 @@ public abstract class PropertySupportBean implements Serializable {
 	
 	protected PropertyChangeSupport pcs;
 	
+	public PropertySupportBean() {
+		pcs = new PropertyChangeSupport(this);
+	}
+	
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
 		pcs.addPropertyChangeListener(pcl);
 	}
