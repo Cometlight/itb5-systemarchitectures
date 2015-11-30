@@ -63,7 +63,7 @@ public class ImageProcessing {
 		ThresholdOperator thresholdOperator = new ThresholdOperator(settings.getThresholdLow(), settings.getThresholdHigh(), settings.getThresholdMap(),
 				(Readable<ImageWrapper>) imageSaver02);
 		ImageSaver imageSaver03 = new ImageSaver("step03", (Readable<ImageWrapper>) thresholdOperator);
-		MedianOperator medianOperator = new MedianOperator((Readable<ImageWrapper>) imageSaver03);
+		MedianOperator medianOperator = new MedianOperator(3, (Readable<ImageWrapper>) imageSaver03);
 		ImageSaver imageSaver04 = new ImageSaver("step04", (Readable<ImageWrapper>) medianOperator);
 		OpeningOperator openingOperator = new OpeningOperator(JAIKernels.circle7, 2,
 				(Readable<ImageWrapper>) imageSaver04);
@@ -95,7 +95,7 @@ public class ImageProcessing {
 		OpeningOperator openingOperator = new OpeningOperator(JAIKernels.circle7, 2,
 				(Writeable<ImageWrapper>) imageSaver05);
 		ImageSaver imageSaver04 = new ImageSaver("step04", (Writeable<ImageWrapper>) openingOperator);
-		MedianOperator medianOperator = new MedianOperator((Writeable<ImageWrapper>) imageSaver04);
+		MedianOperator medianOperator = new MedianOperator(3, (Writeable<ImageWrapper>) imageSaver04);
 		ImageSaver imageSaver03 = new ImageSaver("step03", (Writeable<ImageWrapper>) medianOperator);
 		ThresholdOperator thresholdOperator = new ThresholdOperator(settings.getThresholdLow(), settings.getThresholdHigh(), settings.getThresholdMap(),
 				(Writeable<ImageWrapper>) imageSaver03);
@@ -149,7 +149,7 @@ public class ImageProcessing {
 		new Thread(new ImageSaver("step05", pipe09, pipe10), "ImageSaver 05").start();
 		new Thread(new OpeningOperator(JAIKernels.circle7, 2, pipe08, pipe09), "OpeningOperator").start();
 		new Thread(new ImageSaver("step04", pipe07, pipe08), "ImageSaver 04").start();
-		new Thread(new MedianOperator(pipe06, pipe07), "MedianOperator").start();
+		new Thread(new MedianOperator(3, pipe06, pipe07), "MedianOperator").start();
 		new Thread(new ImageSaver("step03", pipe05, pipe06), "ImageSaver 03").start();
 		new Thread(new ThresholdOperator(settings.getThresholdLow(), settings.getThresholdHigh(), settings.getThresholdMap(), pipe04, pipe05),
 				"ThresholdOperator").start();
