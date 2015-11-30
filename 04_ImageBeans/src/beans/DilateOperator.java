@@ -16,7 +16,7 @@ public class DilateOperator extends ErodeDilateOperator {
 		try {
 			return new itb5.filter.ErodeDilateOperator(
 					Mode.dilate,
-					JAIKernels.circle7,
+					JAIKernels.circle5,
 					this.nrOfProcessingCycles,
 					() -> originalImage.clone()).read();
 		} catch (StreamCorruptedException | InvalidParameterException e) {

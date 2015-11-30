@@ -16,12 +16,12 @@ public class OpeningOperator extends ErodeDilateOperator {
 		try {
 			ImageWrapper eroded = new itb5.filter.ErodeDilateOperator(
 					Mode.erode,
-					JAIKernels.circle7,
+					JAIKernels.circle5,
 					this.nrOfProcessingCycles,
 					() -> originalImage.clone()).read();
 			ImageWrapper dilated = new itb5.filter.ErodeDilateOperator(
 					Mode.dilate,
-					JAIKernels.circle7,
+					JAIKernels.circle5,
 					this.nrOfProcessingCycles,
 					() -> eroded).read();
 			return dilated;
