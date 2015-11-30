@@ -14,6 +14,8 @@ import pimpmypipe.interfaces.Writeable;
 
 /**
  * Performs erode, then dilate. Both times using the same kernel.
+ * 
+ * @note The original opening operator, as used in exercise 02.
  */
 public class OpeningOperator  extends DataTransformationFilter<ImageWrapper> {
 	private KernelJAI _kernel;

@@ -1,12 +1,15 @@
 package itb5.types;
 
+import java.io.Serializable;
+
 import javax.media.jai.PlanarImage;
 
 /**
  * Wraps a {@link #javax.media.jai.PlanarImage}. This is useful when working
  * with PimpMyPipes.
  */
-public class ImageWrapper implements Cloneable {
+public class ImageWrapper implements Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
 	private PlanarImage _image;
 
 	public ImageWrapper(PlanarImage image) {
