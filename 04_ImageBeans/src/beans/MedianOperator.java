@@ -22,10 +22,20 @@ public class MedianOperator extends PropertySupportBean {
 		image = null;
 	}
 
+	/**
+	 * @see #setNrOfProcessingSteps(int)
+	 * @return the number of processing steps
+	 */
 	public int getNrOfProcessingSteps() {
 		return nrOfProcessingSteps;
 	}
 
+	/**
+	 * Fires property change event "nrOfProcessingSteps"
+	 * 
+	 * @see #getNrOfProcessingSteps()
+	 * @param nrOfProcessingSteps specifies how often the median filter shall be applied. Must be > 0
+	 */
 	public void setNrOfProcessingSteps(int nrOfProcessingSteps) {
 		if (nrOfProcessingSteps != this.nrOfProcessingSteps && nrOfProcessingSteps > 0) {
 			int oldValue = this.nrOfProcessingSteps;
@@ -35,16 +45,27 @@ public class MedianOperator extends PropertySupportBean {
 		}
 	}
 
+	/**
+	 * @see #setImage(ImageWrapper)
+	 * @return the processed image
+	 */
 	public ImageWrapper getImage() {
 		return image;
 	}
 
+	/**
+	 * Fires property change event "image", if the image given is valid.
+	 * 
+	 * @see #getImage()
+	 * @param newImageWrapper the new image to be processed.
+	 */
 	public void setImage(ImageWrapper newImageWrapper) {
 		originalImage = newImageWrapper != null ? newImageWrapper.clone() : null;
 
 		process();
 	}
 
+	
 	private void process() {
 		if (originalImage != null) {
 			try {
