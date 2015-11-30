@@ -26,10 +26,18 @@ public class ImageCropper extends PropertySupportBean {
 		this.image = null;
 	}
 
+	/**
+	 * Gets the x-coordinate of the crop-rectangle.
+	 * @return the x-coordinate of the crop-rectangle
+	 */
 	public int getX() {
 		return this.x;
 	}
 
+	/**
+	 * Sets the x-coordinate of the crop-rectangle and fires a property change.
+	 * @param newX the new value of the x-coordinate (>= 0)
+	 */
 	public void setX(int newX) {
 		if (newX >= 0 && newX != x) {
 			int oldX = x;
@@ -39,10 +47,18 @@ public class ImageCropper extends PropertySupportBean {
 		}
 	}
 
+	/**
+	 * Gets the y-coordinate of the crop-rectangle.
+	 * @return the y-coordinate of the crop-rectangle
+	 */
 	public int getY() {
 		return this.y;
 	}
 
+	/**
+	 * Sets the y-coordinate of the crop-rectangle and fires a property change.
+	 * @param newY the new value of the y-coordinate (>= 0)
+	 */
 	public void setY(int newY) {
 		if (newY >= 0 && newY != y) {
 			int oldY = y;
@@ -52,10 +68,18 @@ public class ImageCropper extends PropertySupportBean {
 		}
 	}
 
+	/**
+	 * Gets the height of the crop-rectangle.
+	 * @return the height of the crop-rectangle
+	 */
 	public int getHeight() {
 		return this.height;
 	}
 
+	/**
+	 * Sets the height of the crop-rectangle and fires a property change.
+	 * @param newHeight the new height of the crop-rectangle (>= 0)
+	 */
 	public void setHeight(int newHeight) {
 		if (newHeight >= 0 && newHeight != height) {
 			int oldHeight = height;
@@ -65,10 +89,18 @@ public class ImageCropper extends PropertySupportBean {
 		}
 	}
 
+	/**
+	 * Gets the width of the crop-rectangle.
+	 * @return the width of the crop-rectangle
+	 */
 	public int getWidth() {
 		return this.width;
 	}
 
+	/**
+	 * Sets the width of the crop-rectangle and fires a property change.
+	 * @param newWidth the new width of the crop-rectangle (>= 0)
+	 */
 	public void setWidth(int newWidth) {
 		if (newWidth >= 0 && newWidth != width) {
 			int oldWidth = width;
@@ -78,6 +110,10 @@ public class ImageCropper extends PropertySupportBean {
 		}
 	}
 
+	/**
+	 * Gets the image.
+	 * @return the cropped image
+	 */
 	public ImageWrapper getImage() {
 		return image;
 	}
