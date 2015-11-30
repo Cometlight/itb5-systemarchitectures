@@ -12,6 +12,9 @@ Java-Bean: True
 Name: beans/ImageCropper.class
 Java-Bean: True
 
+Name: beans/ImageCropper2.class
+Java-Bean: True
+
 Name: beans/ImageFileLoader.class
 Java-Bean: True
 
