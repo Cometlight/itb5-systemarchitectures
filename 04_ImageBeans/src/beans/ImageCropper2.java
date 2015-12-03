@@ -89,17 +89,17 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 
 	public void updateLocation(MouseEvent e) {
 		if (rubberBandRectangle != null) {
-//			rubberBandRectangle.width = e.getX() - rubberBandRectangle.x;
-//			rubberBandRectangle.height = e.getY() - rubberBandRectangle.y;
+			rubberBandRectangle.width = e.getX() - rubberBandRectangle.x;
+			rubberBandRectangle.height = e.getY() - rubberBandRectangle.y;
 			
-			System.out.println("a) [" + rubberBandRectangle.x + "," + rubberBandRectangle.y + "], [" + e.getX() + "," + e.getY() + "]");
-			rubberBandRectangle = new Rectangle();
-			rubberBandRectangle.setFrameFromDiagonal(
-					rubberBandRectangle.x, 
-					rubberBandRectangle.y, 
-					e.getX(), 
-					e.getY());
-			System.out.println("b) [" + rubberBandRectangle.x + "," + rubberBandRectangle.y + "], [" + e.getX() + "," + e.getY() + "]");
+//			System.out.println("a) [" + rubberBandRectangle.x + "," + rubberBandRectangle.y + "], [" + e.getX() + "," + e.getY() + "]");
+////			rubberBandRectangle = new Rectangle();
+//			rubberBandRectangle.setFrameFromDiagonal(
+//					rubberBandRectangle.x, 
+//					rubberBandRectangle.y, 
+//					e.getX(), 
+//					e.getY());
+//			System.out.println("b) [" + rubberBandRectangle.x + "," + rubberBandRectangle.y + "], [" + e.getX() + "," + e.getY() + "]");
 			
 			// TODO make left-up working
 		}
