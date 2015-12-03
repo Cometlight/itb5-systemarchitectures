@@ -19,7 +19,8 @@ public class ImageVisualizer extends Canvas {
 		image = null;
 		pcs = new PropertyChangeSupport(this);
 		setSize(100, 100);
-		setBackground(Color.GRAY);
+		setBackground(Color.PINK);
+//		setBackground(Color.GRAY);
 	}
 
 	@Override
