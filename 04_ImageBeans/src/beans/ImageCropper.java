@@ -10,6 +10,7 @@ import itb5.types.ImageWrapper;
  */
 public class ImageCropper extends PropertySupportBean {
 	private static final long serialVersionUID = 1L;
+	private static final int DEFAULT_VALUE = 99999;
 
 	private int x;
 	private int y;
@@ -21,8 +22,8 @@ public class ImageCropper extends PropertySupportBean {
 	public ImageCropper() {
 		this.x = 0;
 		this.y = 0;
-		this.height = Integer.MAX_VALUE;
-		this.width = Integer.MAX_VALUE;
+		this.height = DEFAULT_VALUE;
+		this.width = DEFAULT_VALUE;
 		this.image = null;
 	}
 
