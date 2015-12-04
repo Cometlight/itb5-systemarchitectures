@@ -19,6 +19,7 @@ import itb5.types.ImageWrapper;
 public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
 	protected static final Logger log = Logger.getLogger(PropertySupportBean.class.getName());
+	private static final int DEFAULT_VALUE = 99999;
 
 	private int x;
 	private int y;
@@ -30,13 +31,13 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 	private boolean pressed = false;
 	private boolean dragged = false;
 	private Rectangle rubberBandRectangle = null;
-
+	
 	public ImageCropper2() {
 		super();
 		this.x = 0;
 		this.y = 0;
-		this.height = Integer.MAX_VALUE;
-		this.width = Integer.MAX_VALUE;
+		this.height = DEFAULT_VALUE;
+		this.width = DEFAULT_VALUE;
 		this.image = null;
 		this.pcs = new PropertyChangeSupport(this);
 		setSize(100, 100);
