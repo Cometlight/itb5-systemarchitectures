@@ -61,7 +61,7 @@ public class CalcCentroidsOperator extends PropertySupportBean {
 	 */
 	public void setImage(ImageWrapper newImageWrapper) {
 		image = newImageWrapper != null ? newImageWrapper.clone() : null;
-		pcs.firePropertyChange("image", image, image);
+		pcs.firePropertyChange("image", null, image);
 		process();
 	}
 

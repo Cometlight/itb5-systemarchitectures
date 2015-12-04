@@ -38,3 +38,6 @@ Java-Bean: True
 
 Name: beans/CalcCentroidsOperator.class
 Java-Bean: True
+
+Name: beans/TextOutput.class
+Java-Bean: True

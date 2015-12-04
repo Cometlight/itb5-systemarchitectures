@@ -8,6 +8,9 @@ import java.beans.PropertyChangeSupport;
 
 import itb5.types.ImageWrapper;
 
+/**
+ * Displays the received image and forwards it as "image".
+ */
 public class ImageVisualizer extends Canvas {
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +23,6 @@ public class ImageVisualizer extends Canvas {
 		pcs = new PropertyChangeSupport(this);
 		setSize(100, 100);
 		setBackground(Color.PINK);
-//		setBackground(Color.GRAY);
 	}
 
 	@Override
