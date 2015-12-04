@@ -38,7 +38,6 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 		this.height = Integer.MAX_VALUE;
 		this.width = Integer.MAX_VALUE;
 		this.image = null;
-		this.pcs = new PropertyChangeSupport(this);
 		setSize(100, 100);
 		setBackground(Color.GRAY);
 		addMouseMotionListener(this);
@@ -46,7 +45,6 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 	}
 
 	public void mousePressed(MouseEvent e) {
-		System.out.println("press");
 		rubberBandRectangle = new Rectangle(e.getX(), e.getY(), 0, 0);
 		pressed = true;
 		dragged = false;
@@ -60,7 +58,6 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		System.out.println("release");
 		if (rubberBandRectangle != null && dragged) {
 			this.setX(rubberBandRectangle.x);
 			this.setY(rubberBandRectangle.y);
@@ -90,17 +87,6 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 		if (rubberBandRectangle != null) {
 			rubberBandRectangle.width = e.getX() - rubberBandRectangle.x;
 			rubberBandRectangle.height = e.getY() - rubberBandRectangle.y;
-			
-//			System.out.println("a) [" + rubberBandRectangle.x + "," + rubberBandRectangle.y + "], [" + e.getX() + "," + e.getY() + "]");
-////			rubberBandRectangle = new Rectangle();
-//			rubberBandRectangle.setFrameFromDiagonal(
-//					rubberBandRectangle.x, 
-//					rubberBandRectangle.y, 
-//					e.getX(), 
-//					e.getY());
-//			System.out.println("b) [" + rubberBandRectangle.x + "," + rubberBandRectangle.y + "], [" + e.getX() + "," + e.getY() + "]");
-			
-			// TODO make left-up working
 		}
 
 		repaint();

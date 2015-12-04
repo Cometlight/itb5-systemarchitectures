@@ -1,6 +1,5 @@
 package beans;
 
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.StreamCorruptedException;
 import java.util.logging.Level;
@@ -17,9 +16,9 @@ public class ImageFileLoader extends PropertySupportBean {
 	private ImageWrapper image;
 
 	public ImageFileLoader() {
+		super();
 		filename = "";
 		image = null;
-		pcs = new PropertyChangeSupport(this);
 	}
 
 	/**

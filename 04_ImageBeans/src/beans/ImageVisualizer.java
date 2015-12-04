@@ -20,7 +20,6 @@ public class ImageVisualizer extends Canvas {
 	public ImageVisualizer() {
 		super();
 		image = null;
-		pcs = new PropertyChangeSupport(this);
 		setSize(100, 100);
 		setBackground(Color.PINK);
 	}

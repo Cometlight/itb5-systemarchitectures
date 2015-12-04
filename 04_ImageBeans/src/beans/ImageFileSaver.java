@@ -1,6 +1,5 @@
 package beans;
 
-import java.beans.PropertyChangeSupport;
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
 import java.util.logging.Level;
@@ -17,9 +16,9 @@ public class ImageFileSaver extends PropertySupportBean {
 	private String filename;
 	
 	public ImageFileSaver() {
+		super();
 		image = null;
 		filename = "";
-		pcs = new PropertyChangeSupport(this);
 	}
 	
 	public String getFilename() {
