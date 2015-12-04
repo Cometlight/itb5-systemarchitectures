@@ -38,6 +38,7 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 		this.height = Integer.MAX_VALUE;
 		this.width = Integer.MAX_VALUE;
 		this.image = null;
+		this.pcs = new PropertyChangeSupport(this);
 		setSize(100, 100);
 		setBackground(Color.GRAY);
 		addMouseMotionListener(this);
