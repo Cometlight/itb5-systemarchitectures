@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.TextArea;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 
 /**
  *	Prints {@link #value} into a textfield and fires {@link #value} as a "text".
@@ -12,7 +13,7 @@ public class TextOutput extends TextArea {
 	private static final long serialVersionUID = 1L;
 	
 	private PropertyChangeSupport pcs;
-	private Object value;
+	private Serializable value;
 	
 	public TextOutput() {
 		super();
@@ -24,16 +25,16 @@ public class TextOutput extends TextArea {
 	/**
 	 * @return the content
 	 */
-	public Object getValue() {
+	public Serializable getValue() {
 		return value;
 	}
 	
 	/**
 	 * @param value the content to set
 	 */
-	public void setValue(Object value) {
+	public void setValue(Serializable value) {
 		if(value != null && !value.equals(this.value)) {
-			Object oldValue = this.value;
+			Serializable oldValue = this.value;
 			this.value = value;
 			this.setText(value.toString());
 			repaint();
