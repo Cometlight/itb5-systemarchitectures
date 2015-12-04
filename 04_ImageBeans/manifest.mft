@@ -35,3 +35,6 @@ Java-Bean: True
 
 Name: beans/ThresholdOperator.class
 Java-Bean: True
+
+Name: beans/CalcCentroidsOperator.class
+Java-Bean: True

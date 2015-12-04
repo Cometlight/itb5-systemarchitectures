@@ -1,9 +1,13 @@
 package itb5.types;
 
+import java.io.Serializable;
+
 /**
  * Our implementation of the coordinate required by CalcCentroidsFilter.
  */
-public class Coordinate implements Comparable<Coordinate> {
+public class Coordinate implements Comparable<Coordinate>, Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	public int _x;
 	public int _y;
 	

@@ -188,7 +188,7 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 	 *            the new height of the crop-rectangle (>= 0)
 	 */
 	public void setHeight(int newHeight) {
-		if (newHeight >= 0 && newHeight != height) {
+		if (newHeight > 0 && newHeight != height) {
 			int oldHeight = height;
 			height = newHeight;
 			pcs.firePropertyChange("height", oldHeight, newHeight);
@@ -212,7 +212,7 @@ public class ImageCropper2 extends Canvas implements MouseListener, MouseMotionL
 	 *            the new width of the crop-rectangle (>= 0)
 	 */
 	public void setWidth(int newWidth) {
-		if (newWidth >= 0 && newWidth != width) {
+		if (newWidth > 0 && newWidth != width) {
 			int oldWidth = width;
 			width = newWidth;
 			pcs.firePropertyChange("width", oldWidth, newWidth);
