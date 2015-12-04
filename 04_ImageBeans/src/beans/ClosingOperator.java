@@ -1,6 +1,5 @@
 package beans;
 
-import java.io.Serializable;
 import java.io.StreamCorruptedException;
 import java.security.InvalidParameterException;
 import java.util.logging.Level;
