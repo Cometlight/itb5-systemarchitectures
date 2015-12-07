@@ -1,0 +1,303 @@
+#VRML_SIM V6.0 utf8
+WorldInfo {
+  info [
+    "The model of the E-puck robot"
+    "Author: Simon Blanchoud & Olivier Michel"
+    "Date: 01 SEP 2006"
+  ]
+  title "E-puck"
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.353558 0.881302 0.313533 1.54671
+  position 2.49787 2.02278 0.502042
+}
+PointLight {
+  ambientIntensity 0.5
+  intensity 0.6
+  location 0.14 0.6 -0.55
+  castShadows TRUE
+}
+PointLight {
+  ambientIntensity 0.5
+  intensity 0.6
+  location -0.43 0.6 0.5
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DEF FLOOR Solid {
+  translation 0 -0.0001 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 1
+          specularColor 0.196078 0.196078 0.196078
+        }
+        texture ImageTexture {
+          url [
+            "textures/lightwood.png"
+          ]
+        }
+        textureTransform TextureTransform {
+          center 0.46 0
+          rotation -0.32
+          translation -1.01 0
+        }
+      }
+      geometry DEF PLANE Plane {
+        size 2 2
+      }
+    }
+  ]
+  boundingObject USE PLANE
+}
+DEF WALL1 Solid {
+  translation 1 0.05 0
+  children [
+    DEF WALL_SHAPE Shape {
+      appearance DEF WALL_APPEARANCE Appearance {
+        material Material {
+          diffuseColor 1 0.501961 0.25098
+        }
+      }
+      geometry Box {
+        size 0.02 0.1 2
+      }
+    }
+  ]
+  boundingObject USE WALL_SHAPE
+}
+EPuck {
+  translation -0.0324894 1.79999e-15 0.0286881
+  controller "PushAllBallsToTheWall"
+  camera_pixelSize 0
+}
+DEF WALL2 Solid {
+  translation -1 0.05 0
+  children [
+    USE WALL_SHAPE
+  ]
+  boundingObject USE WALL_SHAPE
+}
+DEF WALL3 Solid {
+  translation 0 0.05 1
+  rotation 0 1 0 1.5708
+  children [
+    USE WALL_SHAPE
+  ]
+  boundingObject USE WALL_SHAPE
+}
+DEF WALL4 Solid {
+  translation 0 0.05 -1
+  rotation 0 1 0 1.5708
+  children [
+    USE WALL_SHAPE
+  ]
+  boundingObject USE WALL_SHAPE
+}
+DEF BALL Solid {
+  translation -0.366672 0.03 -0.57616
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics DEF BALL_PHYSICS Physics {
+    damping DEF BALL_DAMPING Damping {
+      angular 0.5
+    }
+  }
+}
+DEF BALL1 Solid {
+  translation -0.613971 0.03 0.604056
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL2 Solid {
+  translation -0.649363 0.03 -0.037092
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL3 Solid {
+  translation -0.792876 0.03 0.330573
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL4 Solid {
+  translation 0.514505 0.03 0.662605
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL5 Solid {
+  translation -0.721567 0.03 -0.599553
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL6 Solid {
+  translation 0.484391 0.03 -0.637955
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL7 Solid {
+  translation -0.0881157 0.03 0.67872
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL8 Solid {
+  translation 0.685065 0.03 0.227992
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL9 Solid {
+  translation 0.0639484 0.03 -0.403164
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}
+DEF BALL10 Solid {
+  translation 0.47068 0.03 -0.155245
+  scale 0.3 0.3 0.3
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics USE BALL_PHYSICS
+}

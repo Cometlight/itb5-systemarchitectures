@@ -1,0 +1,112 @@
+#VRML_SIM V6.0 utf8
+WorldInfo {
+  info [
+    "The model of the E-puck robot"
+    "Author: Simon Blanchoud & Olivier Michel"
+    "Date: 01 SEP 2006"
+  ]
+  title "E-puck"
+}
+Viewpoint {
+  orientation -0.48865 0.726827 0.482642 1.85326
+  position 2.34449 5.99009 -0.82609
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DEF FLOOR Solid {
+  translation 0 -0.0001 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 1
+          specularColor 0.196078 0.196078 0.196078
+        }
+        texture ImageTexture {
+          url [
+            "textures/lightwood.png"
+          ]
+        }
+        textureTransform TextureTransform {
+          center 0.46 0
+          rotation -0.32
+          translation -1.01 0
+        }
+      }
+      geometry DEF PLANE Plane {
+        size 2 2
+      }
+    }
+  ]
+  boundingObject USE PLANE
+}
+DEF WALL1 Solid {
+  translation 1 0.05 0
+  children [
+    DEF WALL_SHAPE Shape {
+      appearance DEF WALL_APPEARANCE Appearance {
+        material Material {
+          diffuseColor 1 0.501961 0.25098
+        }
+      }
+      geometry Box {
+        size 0.02 0.1 2
+      }
+    }
+  ]
+  boundingObject USE WALL_SHAPE
+}
+EPuck {
+  translation 0.190118 5.7586e-14 -0.240787
+  rotation -0.0688571 0.994869 0.074118 1.61875
+  controller "ProportionalRunningIntoLight"
+  camera_pixelSize 0
+}
+DEF WALL2 Solid {
+  translation -1 0.05 0
+  children [
+    USE WALL_SHAPE
+  ]
+  boundingObject USE WALL_SHAPE
+}
+DEF WALL3 Solid {
+  translation 0 0.05 1
+  rotation 0 1 0 1.5708
+  children [
+    USE WALL_SHAPE
+  ]
+  boundingObject USE WALL_SHAPE
+}
+DEF WALL4 Solid {
+  translation 0 0.05 -1
+  rotation 0 1 0 1.5708
+  children [
+    USE WALL_SHAPE
+  ]
+  boundingObject USE WALL_SHAPE
+}
+DEF LIGHT Solid {
+  translation -0.944992 0.05 -0.950714
+  scale 0.5 0.5 0.5
+  children [
+    PointLight {
+      attenuation 13 10 10
+      intensity 3
+    }
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 1 1 1
+        }
+      }
+      geometry DEF LIGHT_GEOMETRY Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  boundingObject USE LIGHT_GEOMETRY
+  locked TRUE
+}
