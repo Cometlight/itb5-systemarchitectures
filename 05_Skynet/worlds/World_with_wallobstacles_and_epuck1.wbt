@@ -39,7 +39,7 @@ DEF FLOOR Solid {
         }
         texture ImageTexture {
           url [
-            "textures/lightwood.png"
+            "../textures/tiles.png"
           ]
         }
         textureTransform TextureTransform {
