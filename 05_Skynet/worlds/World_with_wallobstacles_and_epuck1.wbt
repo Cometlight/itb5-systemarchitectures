@@ -1,4 +1,4 @@
-#VRML_SIM V7.3.0 utf8
+#VRML_SIM V8.3.1 utf8
 WorldInfo {
   info [
     "The model of the E-puck robot"
@@ -78,8 +78,7 @@ EPuck {
   hidden rotation_2 1 1.3389e-06 4.63294e-06 -0.306915
   translation 0.191252 -0.00013256 -0.797316
   rotation -0.000373855 1 0.000778997 2.24048
-  controller "BangBangBasicReactive"
-  camera_pixelSize 0
+  controller "BangBangA"
 }
 DEF WALL2 Solid {
   translation -1 0.05 0
