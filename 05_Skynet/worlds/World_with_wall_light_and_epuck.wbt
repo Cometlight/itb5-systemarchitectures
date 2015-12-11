@@ -1,4 +1,4 @@
-#VRML_SIM V6.0 utf8
+#VRML_SIM V8.3.1 utf8
 WorldInfo {
   info [
     "The model of the E-puck robot"
@@ -8,8 +8,8 @@ WorldInfo {
   title "E-puck"
 }
 Viewpoint {
-  orientation -0.48865 0.726827 0.482642 1.85326
-  position 2.34449 5.99009 -0.82609
+  orientation -0.238117 0.894795 0.37768 2.08936
+  position 0.601636 0.738281 -0.517214
 }
 Background {
   skyColor [
@@ -23,11 +23,12 @@ DEF FLOOR Solid {
       appearance Appearance {
         material Material {
           diffuseColor 1 1 1
+          emissiveColor 1 1 1
           specularColor 0.196078 0.196078 0.196078
         }
         texture ImageTexture {
           url [
-            "textures/lightwood.png"
+            "../textures/tiles.png"
           ]
         }
         textureTransform TextureTransform {
@@ -50,6 +51,7 @@ DEF WALL1 Solid {
       appearance DEF WALL_APPEARANCE Appearance {
         material Material {
           diffuseColor 1 0.501961 0.25098
+          emissiveColor 0.5 0.5 0.5
         }
       }
       geometry Box {
@@ -62,8 +64,7 @@ DEF WALL1 Solid {
 EPuck {
   translation 0.190118 5.7586e-14 -0.240787
   rotation -0.0688571 0.994869 0.074118 1.61875
-  controller "ProportionalRunningIntoLight"
-  camera_pixelSize 0
+  controller "BangBangB"
 }
 DEF WALL2 Solid {
   translation -1 0.05 0
@@ -94,7 +95,6 @@ DEF LIGHT Solid {
   children [
     PointLight {
       attenuation 13 10 10
-      intensity 3
     }
     Shape {
       appearance Appearance {
