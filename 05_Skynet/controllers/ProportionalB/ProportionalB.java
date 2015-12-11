@@ -17,7 +17,8 @@ public class ProportionalB extends DifferentialWheels {
 	private static final int PROXIMITY_SENSOR_R = 3; // sensor right
 	private static final int PROXIMITY_SENSOR_MAX = 200; // maximum distance for sensors
 	
-	private static final int PROXIMITY_SENSOR_THRESHOLD = 80;
+	private static final int LIGHT_SENSOR_LOWERBOUND = 3100;
+	private static final int LIGHT_SENSOR_UPPERBOUND = 4000;
 	private static final int SENSOR_READING_INTERVALL = 10;	// [ms]
 
 	private Map<String /* name */, DistanceSensor> proximitySensors;
@@ -87,8 +88,8 @@ public class ProportionalB extends DifferentialWheels {
 //			double rightValue = lightSensors.get("front_r").getValue() + lightSensors.get("front_right").getValue() + lightSensors.get("right").getValue() + lightSensors.get("back_right").getValue();
 			
 			
-			double[][] k = { {0,0,0,1,1,1},
-					 		 {1,1,1,0,0,0} };
+			double[][] k = { {0,0,0,0.1,0.25,0.65},
+					 		 {0.65,0.25,0.1,0,0,0} };
 			
 			double[] s = {  lightSensors.get("front_r").getValue(),
 							lightSensors.get("front_right").getValue(),
@@ -98,12 +99,17 @@ public class ProportionalB extends DifferentialWheels {
 							lightSensors.get("front_l").getValue()
 				 		 };
 			
-			double[] c = { -10000d, -10000d };
+			double[] c = { 0, 0d };
 			
 			double[] a = Matrix.add( Matrix.multiply(k, s), c );
 			
-			a[0] = Math.min(1000d, Math.max(0, a[0]));
-			a[1] = Math.min(1000d, Math.max(0, a[1]));
+			double lightSensorRange = LIGHT_SENSOR_UPPERBOUND - LIGHT_SENSOR_LOWERBOUND;
+			a[0] = Math.max(0,a[0]-LIGHT_SENSOR_LOWERBOUND) / lightSensorRange * MAX_SPEED;
+			a[1] = Math.max(0,a[1]-LIGHT_SENSOR_LOWERBOUND) / lightSensorRange * MAX_SPEED;
+			
+			a[0] = Math.min(MAX_SPEED, a[0]);
+			a[1] = Math.min(MAX_SPEED, a[1]);
+					
 			
 			setSpeed(a[0], a[1]);
 			
