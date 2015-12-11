@@ -7,7 +7,7 @@ import com.cyberbotics.webots.controller.DifferentialWheels;
 import com.cyberbotics.webots.controller.DistanceSensor;
 import com.cyberbotics.webots.controller.LightSensor;
 
-public class ProportionalA extends DifferentialWheels {
+public class ProportionalB extends DifferentialWheels {
 	private static final int STEP_TIME = 8;
 	private static final int MIN_SPEED = 0;
 	private static final int MAX_SPEED = 1000;
@@ -17,25 +17,26 @@ public class ProportionalA extends DifferentialWheels {
 	private static final int PROXIMITY_SENSOR_R = 3; // sensor right
 	private static final int PROXIMITY_SENSOR_MAX = 200; // maximum distance for sensors
 	
-	private static final int LIGHT_SENSOR_THRESHOLD = 3500;
+	private static final int PROXIMITY_SENSOR_THRESHOLD = 80;
+	private static final int SENSOR_READING_INTERVALL = 10;	// [ms]
 
-	private DistanceSensor[] proximitySensors;
+	private Map<String /* name */, DistanceSensor> proximitySensors;
 	private Map<String /* name */, LightSensor> lightSensors;
 
-	public ProportionalA() {
+	public ProportionalB() {
 		super();
 
-		proximitySensors = new DistanceSensor[] { 
-				getDistanceSensor("ps5"), 
-				getDistanceSensor("ps7"),
-				getDistanceSensor("ps0"), 
-				getDistanceSensor("ps2") 
-		};
+		proximitySensors = new HashMap<>();
+		proximitySensors.put("front_r", getDistanceSensor("ps0"));
+		proximitySensors.put("front_right", getDistanceSensor("ps1"));
+		proximitySensors.put("right", getDistanceSensor("ps2"));
+		proximitySensors.put("back_right", getDistanceSensor("ps3"));
+		proximitySensors.put("back_left", getDistanceSensor("ps4"));
+		proximitySensors.put("left", getDistanceSensor("ps5"));
+		proximitySensors.put("front_l", getDistanceSensor("ps7"));
+		proximitySensors.put("front_left", getDistanceSensor("ps6"));
 		
-		// enable all proximity sensors
-		for (int i = 0; i < proximitySensors.length; i++) {
-			proximitySensors[i].enable(10);
-		}
+		proximitySensors.entrySet().forEach(proximitySensor -> proximitySensor.getValue().enable(SENSOR_READING_INTERVALL));
 		
 		lightSensors = new HashMap<>();
 		lightSensors.put("front_r", getLightSensor("ls0"));
@@ -49,7 +50,7 @@ public class ProportionalA extends DifferentialWheels {
 		
 		
 		
-		lightSensors.entrySet().forEach(lightSensor -> lightSensor.getValue().enable(10));
+		lightSensors.entrySet().forEach(lightSensor -> lightSensor.getValue().enable(SENSOR_READING_INTERVALL));
 		
 
 		// You should insert a getDevice-like function in order to get the
@@ -65,6 +66,7 @@ public class ProportionalA extends DifferentialWheels {
 		// Main loop:
 		// Perform simulation steps of 64 milliseconds
 		// and leave the loop when the simulation is over
+		int myStep = 0;
 		while (step(STEP_TIME) != -1) {
 			// Read the sensors:
 			// Enter here functions to read sensor data, like:
@@ -81,42 +83,20 @@ public class ProportionalA extends DifferentialWheels {
 //			LightSensor maxLightSensor = maxLightSensorOptional.get().getValue();
 //			System.out.println(maxLightSensor.getName());
 			
-			
-			double[][] k = { {0,0,0,0,1,1,1,1},
-							 {1,1,1,1,0,0,0,0} };
-			
-			double[] s = {  lightSensors.get("front_r").getValue(),
-							lightSensors.get("front_right").getValue(),
-							lightSensors.get("right").getValue(),
-							lightSensors.get("back_right").getValue(),
-							lightSensors.get("back_left").getValue(),
-							lightSensors.get("left").getValue(),
-							lightSensors.get("front_left").getValue(),
-							lightSensors.get("front_l").getValue()
-						 };
-			
-			double[] c = { 0.1d, 0.1d };
-				
-			// TODO: delete and improve
 			double leftValue = lightSensors.get("front_l").getValue() + lightSensors.get("front_left").getValue() + lightSensors.get("left").getValue() + lightSensors.get("back_left").getValue();
 			double rightValue = lightSensors.get("front_r").getValue() + lightSensors.get("front_right").getValue() + lightSensors.get("right").getValue() + lightSensors.get("back_right").getValue();
 			
-			double[] a = { leftValue, rightValue };
-			
-			System.out.println("preChange: " + leftValue + ", " + rightValue);
-			
-			a[0] = 1000d / (leftValue + rightValue) * leftValue;
-			a[1] = 1000d / (leftValue + rightValue) * rightValue;
-			
-			System.out.println(a[0] + ", " + a[1]);
-			
-			setSpeed(a[0], a[1]);
 			
 			
 			
-
+			double[][] k;
 			
-//			if (leftValue < rightValue) {
+			
+//			double proximityValueFrontAvg = 0.5d * (proximitySensors.get("front_l").getValue() + proximitySensors.get("front_r").getValue());
+//			System.out.println(proximityValueFrontAvg);
+//			if (proximityValueFrontAvg > PROXIMITY_SENSOR_THRESHOLD) {
+//				stop();
+//			} else if (leftValue < rightValue) {
 //				driveLeft();
 //			} else {
 //				driveRight();
@@ -135,25 +115,31 @@ public class ProportionalA extends DifferentialWheels {
 			// Enter here functions to send actuator commands, like:
 			// led.set(1);
 		}
-
 		// Enter here exit cleanup code
 	}
 
 
 	public static void main(String[] args) {
-		ProportionalA controller = new ProportionalA();
+		ProportionalB controller = new ProportionalB();
 		controller.run();
 	}
 
 	public void driveLeft() {
+		System.out.println(" Left ");
 		setSpeed(MIN_SPEED, MAX_SPEED);
 	}
 
 	public void driveRight() {
+		System.out.println(" Right ");
 		setSpeed(MAX_SPEED, MIN_SPEED);
 	}
 
 	public void driveForward() {
 		setSpeed(MAX_SPEED, MAX_SPEED);
+	}
+	
+	public void stop() {
+		System.out.println("### STOP ###");
+		setSpeed(0.1, 0.1);
 	}
 }
