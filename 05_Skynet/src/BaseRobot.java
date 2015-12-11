@@ -134,7 +134,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 	public double[] getDistanceSensorDataSmoothed(Sensor... sensors) {
 		double[] values = new double[sensors.length];
 		for (int i = 0; i < values.length; ++i) {
-			values[i] = getMedianValue(distanceSensorValues.get(sensors[i]));
+			values[i] = getDistanceSensorDataSmoothed(sensors[i]);
 		}
 		return values;
 	}
@@ -146,7 +146,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 	public double[] getLightSensorDataSmoothed(Sensor... sensors) {
 		double[] values = new double[sensors.length];
 		for (int i = 0; i < values.length; ++i) {
-			values[i] = getMedianValue(lightSensorValues.get(sensors[i]));
+			values[i] = getLightSensorDataSmoothed(sensors[i]);
 		}
 		return values;
 	}
