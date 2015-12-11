@@ -83,13 +83,37 @@ public class ProportionalB extends DifferentialWheels {
 //			LightSensor maxLightSensor = maxLightSensorOptional.get().getValue();
 //			System.out.println(maxLightSensor.getName());
 			
-			double leftValue = lightSensors.get("front_l").getValue() + lightSensors.get("front_left").getValue() + lightSensors.get("left").getValue() + lightSensors.get("back_left").getValue();
-			double rightValue = lightSensors.get("front_r").getValue() + lightSensors.get("front_right").getValue() + lightSensors.get("right").getValue() + lightSensors.get("back_right").getValue();
+//			double leftValue = lightSensors.get("front_l").getValue() + lightSensors.get("front_left").getValue() + lightSensors.get("left").getValue() + lightSensors.get("back_left").getValue();
+//			double rightValue = lightSensors.get("front_r").getValue() + lightSensors.get("front_right").getValue() + lightSensors.get("right").getValue() + lightSensors.get("back_right").getValue();
 			
 			
+			double[][] k = { {0,0,0,1,1,1},
+					 		 {1,1,1,0,0,0} };
 			
+			double[] s = {  lightSensors.get("front_r").getValue(),
+							lightSensors.get("front_right").getValue(),
+							lightSensors.get("right").getValue(),
+							lightSensors.get("left").getValue(),
+							lightSensors.get("front_left").getValue(),
+							lightSensors.get("front_l").getValue()
+				 		 };
 			
-			double[][] k;
+			double[] c = { -10000d, -10000d };
+			
+			double[] a = Matrix.add( Matrix.multiply(k, s), c );
+			
+			a[0] = Math.min(1000d, Math.max(0, a[0]));
+			a[1] = Math.min(1000d, Math.max(0, a[1]));
+			
+			setSpeed(a[0], a[1]);
+			
+//			a[0] =  (int)(a[0]/101);
+//			a[1] =  (int)(a[1]/101);
+			
+//			double leftValue = 1000d / (a[0] + a[1] + 1) * a[0];
+//			double rightValue = 1000d / (a[0] + a[1] + 1) * a[1];
+			
+//			setSpeed(leftValue, rightValue);
 			
 			
 //			double proximityValueFrontAvg = 0.5d * (proximitySensors.get("front_l").getValue() + proximitySensors.get("front_r").getValue());

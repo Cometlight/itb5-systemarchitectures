@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="libraries"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="controllers/ProportionalB"/>
 	<classpathentry kind="src" path="controllers/BangBangA"/>
 	<classpathentry kind="src" path="controllers/BangBangB"/>
