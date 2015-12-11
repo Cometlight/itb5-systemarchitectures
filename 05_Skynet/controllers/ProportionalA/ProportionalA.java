@@ -95,22 +95,18 @@ public class ProportionalA extends DifferentialWheels {
 							lightSensors.get("front_l").getValue()
 						 };
 			
-			double[] c = { 0.1d, 0.1d };
+			double[] c = { 0d, 0d };
 				
 			// TODO: delete and improve
-			double leftValue = lightSensors.get("front_l").getValue() + lightSensors.get("front_left").getValue() + lightSensors.get("left").getValue() + lightSensors.get("back_left").getValue();
-			double rightValue = lightSensors.get("front_r").getValue() + lightSensors.get("front_right").getValue() + lightSensors.get("right").getValue() + lightSensors.get("back_right").getValue();
+//			double leftValue = lightSensors.get("front_l").getValue() + lightSensors.get("front_left").getValue() + lightSensors.get("left").getValue() + lightSensors.get("back_left").getValue();
+//			double rightValue = lightSensors.get("front_r").getValue() + lightSensors.get("front_right").getValue() + lightSensors.get("right").getValue() + lightSensors.get("back_right").getValue();
 			
-			double[] a = { leftValue, rightValue };
+			double[] a = Matrix.add( Matrix.multiply(k, s), c );
 			
-			System.out.println("preChange: " + leftValue + ", " + rightValue);
+			double leftValue = 1000d / (a[0] + a[1]) * a[0];
+			double rightValue = 1000d / (a[0] + a[1]) * a[1];
 			
-			a[0] = 1000d / (leftValue + rightValue) * leftValue;
-			a[1] = 1000d / (leftValue + rightValue) * rightValue;
-			
-			System.out.println(a[0] + ", " + a[1]);
-			
-			setSpeed(a[0], a[1]);
+			setSpeed(leftValue, rightValue);
 			
 			
 			
