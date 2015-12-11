@@ -2,8 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="libraries"/>
 	<classpathentry kind="src" path="controllers/BangBangA"/>
-	<classpathentry kind="src" path="controllers/BangBangBasicReactive"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="controllers/BangBangB"/>
+	<classpathentry kind="src" path="controllers/BangBangC"/>
+	<classpathentry kind="src" path="controllers/BangBangD"/>
+	<classpathentry kind="src" path="controllers/ProportionalA"/>
+	<classpathentry excluding="BangBangA/|BangBangB/|BangBangC/|BangBangD/|ProportionalA/" kind="src" path="controllers"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="libraries/Controller.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,4 +1,4 @@
-#VRML_SIM V6.0 utf8
+#VRML_SIM V8.3.1 utf8
 WorldInfo {
   info [
     "The model of the E-puck robot"
@@ -10,7 +10,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.996094 0.0787814 0.0398695 0.404128
-  position 0.0687972 0.501902 1.58112
+  position 0.29065 0.48284 1.62604
 }
 PointLight {
   ambientIntensity 0.5
@@ -73,8 +73,7 @@ DEF WALL1 Solid {
 }
 EPuck {
   translation 0.0698057 -6.14955e-15 0.463792
-  controller "ProportionalPushTheBall"
-  camera_pixelSize 0
+  controller "BangBangC"
 }
 DEF WALL2 Solid {
   translation -1 0.05 0

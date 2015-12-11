@@ -9,7 +9,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.238117 0.894795 0.37768 2.08936
-  position 0.601636 0.738281 -0.517214
+  position 1.39853 1.62148 -0.867257
 }
 Background {
   skyColor [
@@ -64,7 +64,7 @@ DEF WALL1 Solid {
 EPuck {
   translation 0.190118 5.7586e-14 -0.240787
   rotation -0.0688571 0.994869 0.074118 1.61875
-  controller "BangBangB"
+  controller "ProportionalA"
 }
 DEF WALL2 Solid {
   translation -1 0.05 0

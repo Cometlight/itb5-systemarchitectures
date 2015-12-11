@@ -10,7 +10,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.00145989 -0.886331 -0.463049 3.16741
-  position 0.0651315 2.11793 -1.79153
+  position 0.0647009 2.10152 -1.78011
 }
 PointLight {
   ambientIntensity 0.5
@@ -78,7 +78,7 @@ EPuck {
   hidden rotation_2 1 1.3389e-06 4.63294e-06 -0.306915
   translation 0.191252 -0.00013256 -0.797316
   rotation -0.000373855 1 0.000778997 2.24048
-  controller "BangBangA"
+  controller "BangBangD"
 }
 DEF WALL2 Solid {
   translation -1 0.05 0
