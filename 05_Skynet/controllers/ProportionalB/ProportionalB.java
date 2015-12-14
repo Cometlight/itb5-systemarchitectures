@@ -8,32 +8,12 @@ public class ProportionalB extends BaseRobot {
 		controller.run();
 	}
 
-	public void driveLeft() {
-		System.out.println(" Left ");
-		setSpeed(MIN_SPEED, MAX_SPEED);
-	}
-
-	public void driveRight() {
-		System.out.println(" Right ");
-		setSpeed(MAX_SPEED, MIN_SPEED);
-	}
-
-	public void driveForward() {
-		setSpeed(MAX_SPEED, MAX_SPEED);
-	}
-	
-	public void stop() {
-		System.out.println("### STOP ###");
-		setSpeed(0.1, 0.1);
-	}
-
-
 	@Override
 	protected void update() {
-		double[][] k = { {0,0,0,0.1,0.25,0.65},
-						 {0.65,0.25,0.1,0,0,0} };
+		double[][] k = { {0,    0,    0,   0.1, 0, 0, 0.25, 0.65},
+						 {0.65, 0.25, 0.1, 0,   0, 0, 0,    0} };
 
-		double[] s = getLightSensorDataSmoothed(Sensor.FRONT_R, Sensor.FRONT_RIGHT, Sensor.RIGHT, Sensor.LEFT, Sensor.FRONT_LEFT, Sensor.FRONT_L);
+		double[] s = getLightSensorDataSmoothed(Sensor.FRONT_R, Sensor.FRONT_RIGHT, Sensor.RIGHT, Sensor.BACK_RIGHT, Sensor.BACK_LEFT, Sensor.LEFT, Sensor.FRONT_LEFT, Sensor.FRONT_L);
 		
 		double[] c = { 0, 0d };
 		
