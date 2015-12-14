@@ -122,9 +122,25 @@ public abstract class BaseRobot extends DifferentialWheels {
 	public double getDistanceSensorDataRaw(Sensor sensor) {
 		return distanceSensors.get(sensor).getValue();
 	}
+	
+	public double[] getDistanceSensorDataRaw(Sensor... sensors) {
+		double[] values = new double[sensors.length];
+		for (int i = 0; i < values.length; ++i) {
+			values[i] = getDistanceSensorDataRaw(sensors[i]);
+		}
+		return values;
+	}
 
 	public double getLightSensorDataRaw(Sensor sensor) {
 		return lightSensors.get(sensor).getValue();
+	}
+	
+	public double[] getLightSensorDataRaw(Sensor... sensors) {
+		double[] values = new double[sensors.length];
+		for (int i = 0; i < values.length; ++i) {
+			values[i] = getLightSensorDataRaw(sensors[i]);
+		}
+		return values;
 	}
 
 	public double getDistanceSensorDataSmoothed(Sensor sensor) {
@@ -174,5 +190,9 @@ public abstract class BaseRobot extends DifferentialWheels {
 	
 	protected void driveForwardMaxSpeed() {
 		setSpeed(MAX_SPEED, MAX_SPEED);
+	}
+	
+	protected void driveStop() {
+		setSpeed(MIN_SPEED, MIN_SPEED);
 	}
 }
