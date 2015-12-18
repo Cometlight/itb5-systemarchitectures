@@ -6,8 +6,8 @@
  * on one wheel during turns!
  */
 public class ProportionalD extends BaseRobot {
-	private	double[][] k = { {1, 0, 0, 0, 0, 0, 0.5, 1, 0},
-							 {-1, 0, 0, 0, 0, 0, 0, 0, 2500}
+	private	double[][] k = { { 1, 0, 0, 0, 0, 0, 0.5, 1,    0},
+							 {-1, 0, 0, 0, 0, 0,   0, 0, 2500}
 	   					   };
 	private double[] c = { 0, MAX_SPEED/6d };
 
@@ -22,7 +22,7 @@ public class ProportionalD extends BaseRobot {
 
 		s[s.length-1] = 1d / getDistanceSensorDataSmoothed(Sensor.FRONT_L);	// inversely proportional to support sharp curve to the left in case of 180deg turns
 
-		double[] a = Matrix.add( Matrix.multiply(k, s), c );
+		double[] a = Matrix.add(Matrix.multiply(k, s), c);
 
 		double leftValue = MAX_SPEED / (a[0] + a[1]) * a[0];
 		double rightValue = MAX_SPEED / (a[0] + a[1]) * a[1];
