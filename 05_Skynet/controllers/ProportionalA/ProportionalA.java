@@ -1,3 +1,6 @@
+/**
+ * This robot runs INTO the light.
+ */
 public class ProportionalA extends BaseRobot {
 	private double[][] k = { {0,0,0,0,1,1,1,1},
 			 				 {1,1,1,1,0,0,0,0} };
