@@ -1,5 +1,8 @@
 import java.util.Arrays;
 
+/**
+ * This robot runs TO the light and stops near it slowing down in its proximity.
+ */
 public class BangBangB extends BaseRobot {
 	private static final int LIGHT_SENSOR_LOWERBOUND = 3000;
 
@@ -8,7 +11,7 @@ public class BangBangB extends BaseRobot {
 		double leftValue = Arrays.stream(getLightSensorDataSmoothed(Sensor.FRONT_L, Sensor.FRONT_LEFT, Sensor.LEFT, Sensor.BACK_LEFT)).sum() / 4d;
 		double rightValue = Arrays.stream(getLightSensorDataSmoothed(Sensor.FRONT_R, Sensor.FRONT_RIGHT, Sensor.RIGHT, Sensor.BACK_RIGHT)).sum() / 4d;
 		double frontValue = Arrays.stream(getLightSensorDataSmoothed(Sensor.FRONT_L, Sensor.FRONT_R)).sum() / 2d;
-		
+
 		if (frontValue < LIGHT_SENSOR_LOWERBOUND) {
 			driveStop();
 		} else if (leftValue < rightValue) {
