@@ -8,6 +8,11 @@ import com.cyberbotics.webots.controller.DifferentialWheels;
 import com.cyberbotics.webots.controller.DistanceSensor;
 import com.cyberbotics.webots.controller.LightSensor;
 
+/**
+ * Offers easy access to raw and smoothed out (-> median) sensor values.
+ * General settings can be modified via the constants, e.g. {@link #MAX_SPEED}
+ * 
+ */
 public abstract class BaseRobot extends DifferentialWheels {
 	private static final int STEP_TIME = 8;
 	protected static final int MIN_SPEED = 0;
@@ -97,28 +102,31 @@ public abstract class BaseRobot extends DifferentialWheels {
 		}
 	}
 
+	
 	private void updateSensorValues() {
 		if (distanceSensorValues.values().size() > 0) {
 			int nrOfValues = distanceSensorValues.values().iterator().next().size();
 			if (nrOfValues >= NO_VALUES_FOR_SMOOTHING) {
-				deleteOldestValue();
+				deleteOldestSensorValue();
 			}
-			insertNewValue();
+			insertNewSensorValue();
 		}
 	}
 
-	private void deleteOldestValue() {
+	private void deleteOldestSensorValue() {
 		distanceSensorValues.values().forEach(queue -> queue.poll());
 		lightSensorValues.values().forEach(queue -> queue.poll());
 	}
 
-	private void insertNewValue() {
+	private void insertNewSensorValue() {
 		distanceSensorValues.entrySet()
 				.forEach(entry -> entry.getValue().add(distanceSensors.get(entry.getKey()).getValue()));
 		lightSensorValues.entrySet()
 				.forEach(entry -> entry.getValue().add(lightSensors.get(entry.getKey()).getValue()));
 	}
 
+	
+	
 	public double getDistanceSensorDataRaw(Sensor sensor) {
 		return distanceSensors.get(sensor).getValue();
 	}
@@ -131,6 +139,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 		return values;
 	}
 
+	
 	public double getLightSensorDataRaw(Sensor sensor) {
 		return lightSensors.get(sensor).getValue();
 	}
@@ -142,6 +151,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 		}
 		return values;
 	}
+	
 
 	public double getDistanceSensorDataSmoothed(Sensor sensor) {
 		return getMedianValue(distanceSensorValues.get(sensor));
@@ -154,6 +164,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 		}
 		return values;
 	}
+	
 
 	public double getLightSensorDataSmoothed(Sensor sensor) {
 		return getMedianValue(lightSensorValues.get(sensor));
@@ -166,19 +177,24 @@ public abstract class BaseRobot extends DifferentialWheels {
 		}
 		return values;
 	}
+	
 
 	private double getMedianValue(Queue<Double> queue) {
 		Double[] sorted = queue.toArray(new Double[0]);
 		Arrays.sort(sorted);
 
 		if (sorted.length == 1) {
+			// if only 1 element -> return this element
 			return sorted[0];
 		} else if (sorted.length % 2 == 1) {
+			// if number of values is odd -> return avg. value of the two central values
 			return (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2d;
 		} else {
+			// if number of values is even -> return central value
 			return sorted[sorted.length / 2];
 		}
 	}
+	
 	
 	protected void driveLeftMaxSpeed() {
 		setSpeed(MIN_SPEED, MAX_SPEED);
