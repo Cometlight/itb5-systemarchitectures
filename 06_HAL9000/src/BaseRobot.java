@@ -4,22 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
+import com.cyberbotics.webots.controller.Accelerometer;
 import com.cyberbotics.webots.controller.DifferentialWheels;
 import com.cyberbotics.webots.controller.DistanceSensor;
 import com.cyberbotics.webots.controller.LightSensor;
 
 public abstract class BaseRobot extends DifferentialWheels {
-	private static final int STEP_TIME = 8;
-	protected static final int MIN_SPEED = 0;
-	protected static final int MAX_SPEED = 1000;
-	private static final int SENSOR_READING_INTERVALL = 10; // [ms]
-	private static final int NO_VALUES_FOR_SMOOTHING = 10;
+	private final int STEP_TIME = 8;
+	protected final int MIN_SPEED = 0;
+	protected final int MAX_SPEED = 1000;
+	private final int SENSOR_READING_INTERVALL = 10; // [ms]
+	private final int NO_VALUES_FOR_SMOOTHING = 10;
 
 	private Map<Sensor, DistanceSensor> distanceSensors;
 	private Map<Sensor, LightSensor> lightSensors;
 
 	private Map<Sensor, Queue<Double>> distanceSensorValues;
 	private Map<Sensor, Queue<Double>> lightSensorValues;
+	private Map<Axis, Queue<Double>> accelerometerValues;
 
 	/**
 	 * Defines what the robot should do each step.
@@ -28,11 +30,25 @@ public abstract class BaseRobot extends DifferentialWheels {
 
 	public BaseRobot() {
 		super();
-
+		
 		initDistanceSensors();
 		initLightSensors();
+		initAccelerometer();
 		initDistanceSensorValues();
 		initLightSensorValues();
+		initAccelerometerValues();
+	}
+
+	private void initAccelerometerValues() {
+		accelerometerValues = new HashMap<>();
+		
+		accelerometerValues.put(Axis.X, new ArrayDeque<Double>());
+		accelerometerValues.put(Axis.Y, new ArrayDeque<Double>());
+		accelerometerValues.put(Axis.Z, new ArrayDeque<Double>());
+	}
+
+	private void initAccelerometer() {
+		getAccelerometer("accelerometer").enable(SENSOR_READING_INTERVALL);
 	}
 
 	private void initDistanceSensors() {
@@ -110,6 +126,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 	private void deleteOldestValue() {
 		distanceSensorValues.values().forEach(queue -> queue.poll());
 		lightSensorValues.values().forEach(queue -> queue.poll());
+		accelerometerValues.values().forEach(queue -> queue.poll());
 	}
 
 	private void insertNewValue() {
@@ -117,6 +134,25 @@ public abstract class BaseRobot extends DifferentialWheels {
 				.forEach(entry -> entry.getValue().add(distanceSensors.get(entry.getKey()).getValue()));
 		lightSensorValues.entrySet()
 				.forEach(entry -> entry.getValue().add(lightSensors.get(entry.getKey()).getValue()));
+		
+		accelerometerValues.entrySet().forEach(
+				entry -> entry.getValue().add( getAccelerometerValue(entry.getKey()) ));
+		
+	}
+	
+	private double getAccelerometerValue(Axis axis) {
+		double[] values = getAccelerometer("accelerometer").getValues();
+		switch(axis) {
+		case X:
+			return values[0];
+		case Y:
+			return values[1];
+		case Z:
+			return values[2];
+		default:
+			return 0d;
+		}
+		
 	}
 
 	public double getDistanceSensorDataRaw(Sensor sensor) {
@@ -165,6 +201,10 @@ public abstract class BaseRobot extends DifferentialWheels {
 			values[i] = getLightSensorDataSmoothed(sensors[i]);
 		}
 		return values;
+	}
+	
+	public double getAccelerometerDataSmoothed(Axis axis) {
+		return getMedianValue(accelerometerValues.get(axis));		// FIXME Math.ABS values !!!! (sonst -1 und +1 --> 0 = median)
 	}
 
 	private double getMedianValue(Queue<Double> queue) {
