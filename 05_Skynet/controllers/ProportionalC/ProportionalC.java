@@ -1,4 +1,8 @@
+/**
+ * Runs towards a ball and pushes it.
+ */
 public class ProportionalC extends BaseRobot {
+	// Because we want to have different emphasis on the sensors in the front/side/back, we use different values.
 	private double[][] k = { {0.65, 0.25, 0.1, 0,   0, 0, 0,    0},
 							 {0,    0,    0,   0.1, 0, 0, 0.25, 0.65}
 	   					   };
@@ -15,6 +19,7 @@ public class ProportionalC extends BaseRobot {
 		
 		double[] a = Matrix.add( Matrix.multiply(k, s), c );
 		
+		// Following lines ensure that leftValue + rightValue = MAX_SPEED
 		double leftValue = MAX_SPEED / (a[0] + a[1]) * a[0];
 		double rightValue = MAX_SPEED / (a[0] + a[1]) * a[1];
 		
