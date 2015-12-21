@@ -36,6 +36,7 @@ public class PushBallsToWall extends BaseRobot {
 	protected void update() {
 		for (Behaviour behaviour : _behaviours) {
 			if (behaviour.update()) {
+//				System.out.println(behaviour.getClass().getName());
 				break;
 			}
 		}
