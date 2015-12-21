@@ -1,8 +1,8 @@
 public class FindBallBehaviour extends Behaviour {
-	private double[][] k = { {0,    0,    0,   0.1, 0, 0, 0.25, 0.65},
-							 {0.65, 0.25, 0.1, 0,   0, 0, 0,    0}
+	private double[][] k = { {1, 0.8, 0.6,   0,   0, 0,     0, 0},
+							 {0,   0,   0,   0,   0, 0.6, 0.8, 1}
 			   			   };
-private double[] c = { 0, 0d };
+	private double[] c = { 0, 0d };
 
 	public FindBallBehaviour(BaseRobot baseRobot) {
 		super(baseRobot);

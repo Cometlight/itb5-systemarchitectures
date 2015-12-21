@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PushBallsToWall extends BaseRobot {
@@ -26,6 +25,7 @@ public class PushBallsToWall extends BaseRobot {
 	public PushBallsToWall() {
 		super();
 		_behaviours = new ArrayList<>();
+		_behaviours.add(new AbandonBallBehaviour(this));
 		_behaviours.add(new PushBallBehaviour(this));
 		_behaviours.add(new FindBallBehaviour(this));
 		
