@@ -12,9 +12,9 @@ public abstract class BaseRobot extends DifferentialWheels {
 	private final int STEP_TIME = 8;
 	protected final int MIN_SPEED = 0;
 	protected final int MAX_SPEED = 1000;
-	private final int SENSOR_READING_INTERVALL = 8; // [ms]
+	protected final int SENSOR_READING_INTERVALL = 8; // [ms]
 	private final int NO_VALUES_FOR_SMOOTHING = 10;
-	private final int NO_VALUES_FOR_SMOOTHING_ACCELEROMETER = 100;
+	private final int NO_VALUES_FOR_SMOOTHING_ACCELEROMETER = 5;
 
 	private Map<Sensor, DistanceSensor> distanceSensors;
 	private Map<Sensor, LightSensor> lightSensors;
@@ -210,10 +210,14 @@ public abstract class BaseRobot extends DifferentialWheels {
 		return values;
 	}
 	
-	public double getAccelerometerDataSmoothed(Axis axis) {
+	public double getAccelerometerDataSmoothedMedian(Axis axis) {
 		return getMedianValue(accelerometerValues.get(axis));
 	}
-
+	
+	public double getAccelerometerDataSmoothedAverage(Axis axis) {
+		return getAverageValue(accelerometerValues.get(axis));
+	}
+	
 	private double getMedianValue(Queue<Double> queue) {
 		Double[] sorted = queue.toArray(new Double[0]);
 		Arrays.sort(sorted);
@@ -225,6 +229,10 @@ public abstract class BaseRobot extends DifferentialWheels {
 		} else {
 			return sorted[sorted.length / 2];
 		}
+	}
+	
+	private double getAverageValue(Queue<Double> queue) {
+		return queue.stream().mapToDouble(d -> d).average().orElse(0d);
 	}
 	
 	protected void driveLeftMaxSpeed() {
@@ -256,7 +264,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 	}
 	
 	@Override
-	public void setSpeed(double right, double left) {
+	public void setSpeed(double left, double right) {
 //		System.out.println("setSpeed called: " + right + ", " + left);
 		
 		right = right == 0 ? 1 : right;
@@ -265,11 +273,19 @@ public abstract class BaseRobot extends DifferentialWheels {
 		double factor = 1;
 		
 		if (right > left) {
-			factor = 1000d/right;
+			factor = 1000d/Math.abs(right);
 		} else {
-			factor = 1000d/left;
+			factor = 1000d/Math.abs(left);
 		}
 		
-		super.setSpeed(right * factor, left * factor);
+		super.setSpeed(left * factor, right * factor);
+	}
+	
+	public void setSpeedReal(double left, double right) {
+		super.setSpeed(left, right);
+	}
+	
+	public long getTimeMillis() {
+		return (long) (getTime() * 1000);
 	}
 }

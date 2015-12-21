@@ -1,6 +1,6 @@
 public class FindBallBehaviour extends Behaviour {
-	private double[][] k = { {1, 0.8, 0.6,   0,   0, 0,     0, 0},
-							 {0,   0,   0,   0,   0, 0.6, 0.8, 1}
+	private double[][] k = { {1, 0.9, 0.6,   0,   0, 0,     0, 0},
+							 {0,   0,   0,   0,   0, 0.6, 0.9, 1}
 			   			   };
 	private double[] c = { 0, 0d };
 
