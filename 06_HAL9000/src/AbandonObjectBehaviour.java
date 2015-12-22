@@ -1,3 +1,7 @@
+/**
+ * If robot crashes into an object (like a wall or ball), it checks if it is really an object
+ * that cannot be moved; if yes, the robot turns, so it doesn't crash into the object again.
+ */
 public class AbandonObjectBehaviour extends Behaviour {
 	private State state = State.NO_CRASH_YET;
 	

@@ -19,6 +19,7 @@ public class StuckTimoutBehaviour extends Behaviour {
 
 	@Override
 	public boolean update() {
+		// Version which uses distance sensor and wheel values instead of the camera:
 //		double[] distanceSensorData = _baseRobot.getDistanceSensorDataSmoothed(Sensor.FRONT_R, Sensor.FRONT_RIGHT, Sensor.RIGHT, Sensor.BACK_RIGHT, Sensor.BACK_LEFT, Sensor.LEFT, Sensor.FRONT_LEFT, Sensor.FRONT_L);
 //		double distanceSensorAvg = Arrays.stream(distanceSensorData).average().orElse(0d);
 //		
@@ -26,6 +27,7 @@ public class StuckTimoutBehaviour extends Behaviour {
 //		
 //		valueHistory.add(distanceSensorAvg + speedAvg);
 		
+		// Version which uses the camera data as opposed to distance sensor and wheel values:
 		valueHistory.add(Arrays.stream(_baseRobot.getCamera("camera").getImage()).average().orElse(0d));
 		
 		if (valueHistory.size() > SIZE_VALUE_HISTORY) {

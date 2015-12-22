@@ -1,5 +1,8 @@
+/**
+ * Uses the distance sensors to find and drive into balls, pushing them in doing so.
+ */
 public class FindBallBehaviour extends Behaviour {
-	private double[][] k = { {1, 0.9, 0.6,   0,   0, 0,     0, 0},
+	private double[][] k = { {1, 0.9, 0.6,   0,   0, 0,     0, 0},	// We emphasize the sensor values at the front.
 							 {0,   0,   0,   0,   0, 0.6, 0.9, 1}
 			   			   };
 	private double[] c = { 0, 0d };
@@ -14,10 +17,7 @@ public class FindBallBehaviour extends Behaviour {
 		
 		double[] a = Matrix.add( Matrix.multiply(k, s), c );
 		
-		double leftValue = _baseRobot.MAX_SPEED / (a[0] + a[1]) * a[0];
-		double rightValue = _baseRobot.MAX_SPEED / (a[0] + a[1]) * a[1];
-		
-		_baseRobot.setSpeed(leftValue, rightValue);
+		_baseRobot.setSpeed(a[0], a[1]);
 		
 		return true;
 	}

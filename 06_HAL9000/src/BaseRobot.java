@@ -13,7 +13,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 	protected final int MIN_SPEED = 0;
 	protected final int MAX_SPEED = 1000;
 	protected final int SENSOR_READING_INTERVALL = 8; // [ms]
-	private final int NO_VALUES_FOR_SMOOTHING = 10;
+	private final int NO_VALUES_FOR_SMOOTHING = 10;	// For all sensors except accelerometer
 	private final int NO_VALUES_FOR_SMOOTHING_ACCELEROMETER = 5;
 
 	private Map<Sensor, DistanceSensor> distanceSensors;
@@ -260,7 +260,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 	}
 	
 	protected void driveBackwards() {
-		/*super.*/setSpeed(-MAX_SPEED, -MAX_SPEED);
+		setSpeed(-MAX_SPEED, -MAX_SPEED);
 	}
 	
 	@Override
@@ -278,10 +278,6 @@ public abstract class BaseRobot extends DifferentialWheels {
 		
 		super.setSpeed(left * factor, right * factor);
 	}
-//	
-//	public void setSpeedReal(double left, double right) {
-//		super.setSpeed(left, right);
-//	}
 	
 	public long getTimeMillis() {
 		return (long) (getTime() * 1000);
