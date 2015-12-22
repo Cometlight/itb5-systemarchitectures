@@ -26,7 +26,7 @@ public class PushBallsToWall extends BaseRobot {
 		super();
 		_behaviours = new ArrayList<>();
 		_behaviours.add(new StuckTimoutBehaviour(this));
-		_behaviours.add(new AbandonBallBehaviour(this));
+		_behaviours.add(new AbandonObjectBehaviour(this));
 //		_behaviours.add(new PushBallBehaviour(this));
 		_behaviours.add(new FindBallBehaviour(this));
 		

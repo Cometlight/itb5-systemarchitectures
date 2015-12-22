@@ -260,13 +260,11 @@ public abstract class BaseRobot extends DifferentialWheels {
 	}
 	
 	protected void driveBackwards() {
-		super.setSpeed(-MAX_SPEED, -MAX_SPEED);
+		/*super.*/setSpeed(-MAX_SPEED, -MAX_SPEED);
 	}
 	
 	@Override
 	public void setSpeed(double left, double right) {
-//		System.out.println("setSpeed called: " + right + ", " + left);
-		
 		right = right == 0 ? 1 : right;
 		left = left == 0 ? 1 : left;
 		
@@ -280,10 +278,10 @@ public abstract class BaseRobot extends DifferentialWheels {
 		
 		super.setSpeed(left * factor, right * factor);
 	}
-	
-	public void setSpeedReal(double left, double right) {
-		super.setSpeed(left, right);
-	}
+//	
+//	public void setSpeedReal(double left, double right) {
+//		super.setSpeed(left, right);
+//	}
 	
 	public long getTimeMillis() {
 		return (long) (getTime() * 1000);

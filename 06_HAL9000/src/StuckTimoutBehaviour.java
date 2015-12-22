@@ -35,7 +35,6 @@ public class StuckTimoutBehaviour extends Behaviour {
 		}
 		
 		if (_baseRobot.getTimeMillis() - startOfLiberationAction < LIBERATION_DURATION) {
-//			changeSpeedRandomly();
 			return true;
 		}
 		
@@ -44,7 +43,7 @@ public class StuckTimoutBehaviour extends Behaviour {
 		if (getVariance(valueHistory) <= STUCK_VARIANCE_THRESHOLD) {
 			// we're probably stuck somewhere; let's drive randomly for some time
 			startOfLiberationAction = _baseRobot.getTimeMillis();
-			setRandomSpeed();
+			setRandomBackwardsSpeed();
 			return true;
 		}
 		
@@ -61,22 +60,12 @@ public class StuckTimoutBehaviour extends Behaviour {
         return temp/queue.size();
     }
 
-	private void setRandomSpeed() {
+	private void setRandomBackwardsSpeed() {
 		double rnd = Math.random();
 		if (rnd < 0.5d) {
-			_baseRobot.setSpeedReal(-_baseRobot.MAX_SPEED, -_baseRobot.MAX_SPEED/2d);
+			_baseRobot.setSpeed(-_baseRobot.MAX_SPEED, -_baseRobot.MAX_SPEED/2d);
 		} else {
-			_baseRobot.setSpeedReal(-_baseRobot.MAX_SPEED/2d, -_baseRobot.MAX_SPEED);
+			_baseRobot.setSpeed(-_baseRobot.MAX_SPEED/2d, -_baseRobot.MAX_SPEED);
 		}
-//		_baseRobot.setSpeedReal((Math.random() * 2 - 1) * _baseRobot.MAX_SPEED, (Math.random() * 2 - 1) * _baseRobot.MAX_SPEED);
-//		System.out.println("speed set to " + _baseRobot.getRightSpeed() + ", " + _baseRobot.getLeftSpeed());
-	}
-	
-	private void changeSpeedRandomly() {
-		double left = Math.max(-_baseRobot.MAX_SPEED, Math.min(_baseRobot.MAX_SPEED, _baseRobot.getLeftSpeed() + (Math.random() * 2 - 1) * 50d));
-		double right = Math.max(-_baseRobot.MAX_SPEED, Math.min(_baseRobot.MAX_SPEED, _baseRobot.getRightSpeed() + (Math.random() * 2 - 1) * 50d));
-		
-//		System.out.println("new speed: " + right + ", " + left);
-		_baseRobot.setSpeedReal(left, right);
 	}
 }
