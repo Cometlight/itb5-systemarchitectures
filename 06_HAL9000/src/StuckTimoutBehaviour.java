@@ -3,13 +3,16 @@ import java.util.Arrays;
 import java.util.Queue;
 import java.util.stream.DoubleStream;
 
+/**
+ * Effective when the robot is stuck on a wall.
+ */
 public class StuckTimoutBehaviour extends Behaviour {
 	private static final int SIZE_VALUE_HISTORY = 250;
 	private static final int STUCK_VARIANCE_THRESHOLD = 100000000;
 	private static final int LIBERATION_DURATION = 1500;	// [ms]
-	
+
 	private long startOfLiberationAction;
-	
+
 	private Queue<Double> valueHistory = new ArrayDeque<>();	// currently distance sensors + speed
 
 	public StuckTimoutBehaviour(BaseRobot baseRobot) {
@@ -22,36 +25,36 @@ public class StuckTimoutBehaviour extends Behaviour {
 		// Version which uses distance sensor and wheel values instead of the camera:
 //		double[] distanceSensorData = _baseRobot.getDistanceSensorDataSmoothed(Sensor.FRONT_R, Sensor.FRONT_RIGHT, Sensor.RIGHT, Sensor.BACK_RIGHT, Sensor.BACK_LEFT, Sensor.LEFT, Sensor.FRONT_LEFT, Sensor.FRONT_L);
 //		double distanceSensorAvg = Arrays.stream(distanceSensorData).average().orElse(0d);
-//		
+//
 //		double speedAvg = (_baseRobot.getLeftSpeed() + _baseRobot.getRightSpeed()) / 4d;
-//		
+//
 //		valueHistory.add(distanceSensorAvg + speedAvg);
-		
+
 		// Version which uses the camera data as opposed to distance sensor and wheel values:
 		valueHistory.add(Arrays.stream(_baseRobot.getCamera("camera").getImage()).average().orElse(0d));
-		
+
 		if (valueHistory.size() > SIZE_VALUE_HISTORY) {
 			valueHistory.poll();
 		} else {
 			return false;
 		}
-		
+
 		if (_baseRobot.getTimeMillis() - startOfLiberationAction < LIBERATION_DURATION) {
 			return true;
 		}
-		
+
 		System.out.println(getVariance(valueHistory));
-		
+
 		if (getVariance(valueHistory) <= STUCK_VARIANCE_THRESHOLD) {
 			// we're probably stuck somewhere; let's drive randomly for some time
 			startOfLiberationAction = _baseRobot.getTimeMillis();
 			setRandomBackwardsSpeed();
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
     private double getVariance(Queue<Double> queue)
     {
     	DoubleStream dS = queue.stream().mapToDouble(d -> d);
