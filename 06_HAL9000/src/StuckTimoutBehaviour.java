@@ -9,7 +9,7 @@ import java.util.stream.DoubleStream;
 public class StuckTimoutBehaviour extends Behaviour {
 	private static final int SIZE_VALUE_HISTORY = 250;
 	private static final int STUCK_VARIANCE_THRESHOLD = 100000000;
-	private static final int LIBERATION_DURATION = 1500;	// [ms]
+	private static final int LIBERATION_DURATION = 750;	// [ms]
 
 	private long startOfLiberationAction;
 
@@ -42,8 +42,6 @@ public class StuckTimoutBehaviour extends Behaviour {
 		if (_baseRobot.getTimeMillis() - startOfLiberationAction < LIBERATION_DURATION) {
 			return true;
 		}
-
-		System.out.println(getVariance(valueHistory));
 
 		if (getVariance(valueHistory) <= STUCK_VARIANCE_THRESHOLD) {
 			// we're probably stuck somewhere; let's drive randomly for some time
