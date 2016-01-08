@@ -1,6 +1,6 @@
 /**
  * Uses the distance sensors to find and drive into balls, pushing them in doing
- * so.
+ * so. This uses the proportional approach and uses the distance sensors for this.
  */
 public class FindBallBehaviour extends Behaviour {
 	private double[][] k = { {1, 0.9, 0.6,   0,   0, 0,     0, 0},	// We emphasize the sensor values at the front.

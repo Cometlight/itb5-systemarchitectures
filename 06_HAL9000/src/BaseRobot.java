@@ -8,6 +8,11 @@ import com.cyberbotics.webots.controller.DifferentialWheels;
 import com.cyberbotics.webots.controller.DistanceSensor;
 import com.cyberbotics.webots.controller.LightSensor;
 
+/**
+ * Initializes the robot to be used by more specialized robot controllers.
+ *
+ * Provides methods to access sensor values, also as a history of sensor values.
+ */
 public abstract class BaseRobot extends DifferentialWheels {
 	private final int STEP_TIME = 8;
 	protected final int MIN_SPEED = 0;
@@ -30,7 +35,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 
 	public BaseRobot() {
 		super();
-		
+
 		initDistanceSensors();
 		initLightSensors();
 		initAccelerometer();
@@ -41,7 +46,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 
 	private void initAccelerometerValues() {
 		accelerometerValues = new HashMap<>();
-		
+
 		accelerometerValues.put(Axis.X, new ArrayDeque<Double>());
 		accelerometerValues.put(Axis.Y, new ArrayDeque<Double>());
 		accelerometerValues.put(Axis.Z, new ArrayDeque<Double>());
@@ -141,12 +146,12 @@ public abstract class BaseRobot extends DifferentialWheels {
 				.forEach(entry -> entry.getValue().add(distanceSensors.get(entry.getKey()).getValue()));
 		lightSensorValues.entrySet()
 				.forEach(entry -> entry.getValue().add(lightSensors.get(entry.getKey()).getValue()));
-		
+
 		accelerometerValues.entrySet().forEach(
 				entry -> entry.getValue().add( Math.abs(getAccelerometerValue(entry.getKey())) ));
-		
+
 	}
-	
+
 	private double getAccelerometerValue(Axis axis) {
 		double[] values = getAccelerometer("accelerometer").getValues();
 		switch(axis) {
@@ -159,13 +164,13 @@ public abstract class BaseRobot extends DifferentialWheels {
 		default:
 			return 0d;
 		}
-		
+
 	}
 
 	public double getDistanceSensorDataRaw(Sensor sensor) {
 		return distanceSensors.get(sensor).getValue();
 	}
-	
+
 	public double[] getDistanceSensorDataRaw(Sensor... sensors) {
 		double[] values = new double[sensors.length];
 		for (int i = 0; i < values.length; ++i) {
@@ -177,7 +182,7 @@ public abstract class BaseRobot extends DifferentialWheels {
 	public double getLightSensorDataRaw(Sensor sensor) {
 		return lightSensors.get(sensor).getValue();
 	}
-	
+
 	public double[] getLightSensorDataRaw(Sensor... sensors) {
 		double[] values = new double[sensors.length];
 		for (int i = 0; i < values.length; ++i) {
@@ -209,15 +214,15 @@ public abstract class BaseRobot extends DifferentialWheels {
 		}
 		return values;
 	}
-	
+
 	public double getAccelerometerDataSmoothedMedian(Axis axis) {
 		return getMedianValue(accelerometerValues.get(axis));
 	}
-	
+
 	public double getAccelerometerDataSmoothedAverage(Axis axis) {
 		return getAverageValue(accelerometerValues.get(axis));
 	}
-	
+
 	private double getMedianValue(Queue<Double> queue) {
 		Double[] sorted = queue.toArray(new Double[0]);
 		Arrays.sort(sorted);
@@ -230,55 +235,55 @@ public abstract class BaseRobot extends DifferentialWheels {
 			return sorted[sorted.length / 2];
 		}
 	}
-	
+
 	private double getAverageValue(Queue<Double> queue) {
 		return queue.stream().mapToDouble(d -> d).average().orElse(0d);
 	}
-	
+
 	protected void driveLeftMaxSpeed() {
 		setSpeed(MIN_SPEED, MAX_SPEED);
 	}
-	
+
 	protected void driveRightMaxSpeed() {
 		setSpeed(MAX_SPEED, MIN_SPEED);
 	}
-	
+
 	protected void driveForwardMaxSpeed() {
 		setSpeed(MAX_SPEED, MAX_SPEED);
 	}
-	
+
 	protected void driveStop() {
 		setSpeed(MIN_SPEED, MIN_SPEED);
 	}
-	
+
 	protected void turnAroundLeft() {
 		setSpeed(MAX_SPEED, -MAX_SPEED);
 	}
-	
+
 	protected void turnAroundRight() {
 		setSpeed(-MAX_SPEED, MAX_SPEED);
 	}
-	
+
 	protected void driveBackwards() {
 		setSpeed(-MAX_SPEED, -MAX_SPEED);
 	}
-	
+
 	@Override
 	public void setSpeed(double left, double right) {
 		right = right == 0 ? 1 : right;
 		left = left == 0 ? 1 : left;
-		
+
 		double factor = 1;
-		
+
 		if (right > left) {
 			factor = 1000d/Math.abs(right);
 		} else {
 			factor = 1000d/Math.abs(left);
 		}
-		
+
 		super.setSpeed(left * factor, right * factor);
 	}
-	
+
 	public long getTimeMillis() {
 		return (long) (getTime() * 1000);
 	}

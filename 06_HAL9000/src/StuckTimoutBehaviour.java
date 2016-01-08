@@ -5,6 +5,12 @@ import java.util.stream.DoubleStream;
 
 /**
  * Effective when the robot is stuck on a wall.
+ *
+ * Detects that the robot is stuck and tries to back off.
+ *
+ * TODO: detecting being stuck and backing off are two different tasks.
+ *       probably we should split this class, so that other behaviors can uses
+ *       them separately.
  */
 public class StuckTimoutBehaviour extends Behaviour {
 	private static final int SIZE_VALUE_HISTORY = 250;
@@ -20,6 +26,10 @@ public class StuckTimoutBehaviour extends Behaviour {
 		_baseRobot.getCamera("camera").enable(_baseRobot.SENSOR_READING_INTERVALL);
 	}
 
+  /**
+   * TODO: find way to implement this behavior without depending on the environment.
+   *       currently, the approach using the camera depends on the ball's color.
+   */
 	@Override
 	public boolean update() {
 		// Version which uses distance sensor and wheel values instead of the camera:
@@ -53,6 +63,9 @@ public class StuckTimoutBehaviour extends Behaviour {
 		return false;
 	}
 
+    /**
+     * TODO: this method isn't specific to this behavior. move out from here
+     */
     private double getVariance(Queue<Double> queue)
     {
     	DoubleStream dS = queue.stream().mapToDouble(d -> d);
